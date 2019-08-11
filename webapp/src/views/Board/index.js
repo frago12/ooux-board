@@ -7,10 +7,13 @@ import Grid from "components/Grid";
 
 const data = [
   {
-    name: "Chef",
+    id: "123",
+    objectName: "Chef",
     data: [
-      { id: 1, type: "core", name: "Name" },
-      { id: 1, type: "core", name: "Profile pic" },
+      { position: 1, type: "coredata", name: "Profile pic" },
+      { position: 2, type: "metadata", name: "Name" },
+      { position: 3, type: "object", name: "Recipes" },
+      { position: 4, type: "cta", name: "Follow" },
     ],
   },
 ];
@@ -18,19 +21,9 @@ const data = [
 function Board() {
   return (
     <div css={cssBoard}>
-      <Grid
-        data={data}
-        itemRenderer={ItemRenderer}
-        onAdd={() => {}}
-        onRemove={() => {}}
-      />
+      <Grid data={data} />
     </div>
   );
-}
-
-function ItemRenderer(props) {
-  console.log(props);
-  return <div>renderer</div>;
 }
 
 export default Board;
