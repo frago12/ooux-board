@@ -16,7 +16,7 @@ type Props = {|
   |}>,
 |};
 
-function Column({ name, data: _data }: Props) {
+function List({ name, data: _data }: Props) {
   const [data, setData] = React.useState(_data);
 
   const moveItem = React.useCallback(
@@ -32,7 +32,7 @@ function Column({ name, data: _data }: Props) {
   );
 
   return (
-    <div css={cssColumn}>
+    <div css={cssList}>
       <MainObject name={name} />
       {data.map((item, index) => (
         <Item
@@ -48,9 +48,9 @@ function Column({ name, data: _data }: Props) {
   );
 }
 
-export default Column;
+export default List;
 
-const cssColumn = css`
+const cssList = css`
   > * {
     margin-bottom: 5px;
   }

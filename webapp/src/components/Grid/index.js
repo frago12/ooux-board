@@ -6,7 +6,7 @@ import { DndProvider } from "react-dnd";
 import { css } from "@emotion/core";
 
 // import AddCell from "./AddCell";
-import Column from "./Column";
+import List from "./List";
 // import useGrid from "./useGrid";
 
 import type { Type as ItemType } from "./Item";
@@ -40,8 +40,8 @@ function Grid({ data }: Props) {
   return (
     <div css={cssGrid}>
       <DndProvider backend={HTML5Backend}>
-        {data.map(column => (
-          <Column key={column.id} name={column.objectName} data={column.data} />
+        {data.map(list => (
+          <List key={list.id} name={list.objectName} data={list.data} />
         ))}
       </DndProvider>
     </div>
