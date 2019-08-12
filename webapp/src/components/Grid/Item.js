@@ -14,7 +14,7 @@ type Props = {|
   id: number,
   type: Type,
   listId: string,
-  move: (dragIndex, hoverIndex) => void,
+  move: (number, number) => void,
 |};
 
 function Item({ index, name, id, type, listId, move }: Props) {

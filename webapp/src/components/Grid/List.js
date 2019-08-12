@@ -9,17 +9,19 @@ import MainObject from "./MainObject";
 import { ItemContainer } from "./styledComponents";
 import { getColor } from "./utils";
 
-type ItemType = {|
+import type { Type as ItemValuesType } from "./Item";
+
+type ItemObjType = {|
   id: number,
   name: string,
-  type: ItemType,
+  type: ItemValuesType,
 |};
 
 type Props = {|
   id: string,
   name: string,
-  items: ItemType[],
-  ctas: ItemType[],
+  items: ItemObjType[],
+  ctas: ItemObjType[],
   maxCtas: number,
 |};
 

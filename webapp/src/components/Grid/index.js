@@ -8,7 +8,7 @@ import { css } from "@emotion/core";
 import List from "./List";
 import useBoard from "./useBoard";
 
-import type { Type as ItemType } from "./Item";
+import type { Type as ItemValuesType } from "./Item";
 
 export type Data = Array<{
   id: string,
@@ -16,7 +16,7 @@ export type Data = Array<{
   data: Array<{|
     id: number,
     name: string,
-    type: ItemType,
+    type: ItemValuesType,
   |}>,
 }>;
 

@@ -6,6 +6,7 @@ import type { Data } from ".";
 function useBoard(data: Data) {
   const { parsedData, maxCtas } = React.useMemo(() => {
     let maxCtas = 0;
+    // $FlowFixMe
     const parsedData = data.map(list => {
       const items = [];
       const ctas = [];
