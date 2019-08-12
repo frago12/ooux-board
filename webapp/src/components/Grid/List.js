@@ -8,6 +8,7 @@ import Item from "./Item";
 import MainObject from "./MainObject";
 
 type Props = {|
+  id: string,
   name: string,
   data: Array<{|
     name: string,
@@ -16,7 +17,7 @@ type Props = {|
   |}>,
 |};
 
-function List({ name, data: _data }: Props) {
+function List({ id, name, data: _data }: Props) {
   const [data, setData] = React.useState(_data);
 
   const moveItem = React.useCallback(
@@ -38,6 +39,7 @@ function List({ name, data: _data }: Props) {
         <Item
           key={item.position}
           index={index}
+          listId={id}
           name={item.name}
           position={item.position}
           type={item.type}

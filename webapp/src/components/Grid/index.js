@@ -12,6 +12,7 @@ import List from "./List";
 import type { Type as ItemType } from "./Item";
 
 export type Data = Array<{
+  id: string,
   objectName: string,
   data: Array<{|
     name: string,
@@ -41,7 +42,12 @@ function Grid({ data }: Props) {
     <div css={cssGrid}>
       <DndProvider backend={HTML5Backend}>
         {data.map(list => (
-          <List key={list.id} name={list.objectName} data={list.data} />
+          <List
+            key={list.id}
+            id={list.id}
+            name={list.objectName}
+            data={list.data}
+          />
         ))}
       </DndProvider>
     </div>
@@ -53,4 +59,8 @@ export default Grid;
 const cssGrid = css`
   display: flex;
   width: 100%;
+
+  > * {
+    margin-right: 15px;
+  }
 `;

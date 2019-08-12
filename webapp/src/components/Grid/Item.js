@@ -13,14 +13,15 @@ type Props = {|
   name: string,
   position: number,
   type: Type,
+  listId: string,
   move: (dragIndex, hoverIndex) => void,
 |};
 
-function Item({ index, name, position, type, move }: Props) {
+function Item({ index, name, position, type, listId, move }: Props) {
   const ref = React.useRef(null);
   const [, drop] = useDrop({
     // TODO: update this when working with multiple lists
-    accept: "items",
+    accept: listId,
     hover(item, monitor) {
       if (!ref.current) return;
 
@@ -54,7 +55,7 @@ function Item({ index, name, position, type, move }: Props) {
   });
 
   const [{ isDragging }, drag] = useDrag({
-    item: { type: "items", position, index },
+    item: { type: listId, position, index },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),

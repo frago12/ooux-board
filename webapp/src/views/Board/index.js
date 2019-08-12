@@ -16,6 +16,14 @@ const data = [
       { position: 4, type: "cta", name: "Follow" },
     ],
   },
+  {
+    id: "456",
+    objectName: "Recipe",
+    data: [
+      { position: 1, type: "coredata", name: "Name" },
+      { position: 2, type: "coredata", name: "Instructions" },
+    ],
+  },
 ];
 
 function Board() {
