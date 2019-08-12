@@ -11,13 +11,13 @@ export type Type = "object" | "coredata" | "metadata" | "cta";
 type Props = {|
   index: number,
   name: string,
-  position: number,
+  id: number,
   type: Type,
   listId: string,
   move: (dragIndex, hoverIndex) => void,
 |};
 
-function Item({ index, name, position, type, listId, move }: Props) {
+function Item({ index, name, id, type, listId, move }: Props) {
   const ref = React.useRef(null);
   const [, drop] = useDrop({
     // TODO: update this when working with multiple lists
@@ -55,7 +55,7 @@ function Item({ index, name, position, type, listId, move }: Props) {
   });
 
   const [{ isDragging }, drag] = useDrag({
-    item: { type: listId, position, index },
+    item: { type: listId, id, index },
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),

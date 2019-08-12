@@ -15,6 +15,8 @@ export function getColor(type: Type) {
       return colors.red;
     case "cta":
       return colors.green;
+    case "empty":
+      return "transparent";
     default:
       throw new Error("Invalid item type");
   }

@@ -5,9 +5,8 @@ import HTML5Backend from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { css } from "@emotion/core";
 
-// import AddCell from "./AddCell";
 import List from "./List";
-// import useGrid from "./useGrid";
+import useBoard from "./useBoard";
 
 import type { Type as ItemType } from "./Item";
 
@@ -15,9 +14,9 @@ export type Data = Array<{
   id: string,
   objectName: string,
   data: Array<{|
+    id: number,
     name: string,
     type: ItemType,
-    position: number,
   |}>,
 }>;
 
@@ -25,19 +24,8 @@ type Props = {|
   data: Data,
 |};
 
-function Grid({ data }: Props) {
-  // const {
-  //   columns,
-  //   columnIndex: currentColumnIndex,
-  //   rowIndex: currentRowIndex,
-  //   editableContent,
-  //   setEditableContent,
-  //   handleClick,
-  //   handleKeyDown,
-  // } = useGrid(data);
-
-  // const onKeyDown = ({ keyCode }) => handleKeyDown(keyCode);
-
+function Grid({ data: _data }: Props) {
+  const { data, maxCtas } = useBoard(_data);
   return (
     <div css={cssGrid}>
       <DndProvider backend={HTML5Backend}>
@@ -46,7 +34,9 @@ function Grid({ data }: Props) {
             key={list.id}
             id={list.id}
             name={list.objectName}
-            data={list.data}
+            items={list.items}
+            ctas={list.ctas}
+            maxCtas={maxCtas}
           />
         ))}
       </DndProvider>
