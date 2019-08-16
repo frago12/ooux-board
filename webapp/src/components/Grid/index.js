@@ -9,6 +9,7 @@ import List from "./List";
 import useBoard from "./useBoard";
 
 import type { Type as ItemValuesType } from "./Item";
+import type { NewItem } from "./AddItem";
 
 export type Data = Array<{
   id: string,
@@ -22,21 +23,23 @@ export type Data = Array<{
 
 type Props = {|
   data: Data,
+  handleCreate: (string, NewItem) => void,
 |};
 
-function Grid({ data: _data }: Props) {
+function Grid({ data: _data, handleCreate }: Props) {
   const { data, maxCtas } = useBoard(_data);
   return (
     <div css={cssGrid}>
       <DndProvider backend={HTML5Backend}>
         {data.map(list => (
           <List
-            key={list.id}
+            key={`${list.objectName}-${list.items.length}-${list.ctas.length}`}
             id={list.id}
             name={list.objectName}
             items={list.items}
             ctas={list.ctas}
             maxCtas={maxCtas}
+            handleCreate={handleCreate}
           />
         ))}
       </DndProvider>

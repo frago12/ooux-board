@@ -1,4 +1,7 @@
-export const colors = {
+// @flow
+import type { Type } from "./Item";
+
+const colors = {
   blue: "#5BAFF8",
   yellow: "#F7C44D",
   red: "#FE6883",

@@ -4,12 +4,14 @@ import React from "react";
 import update from "immutability-helper";
 import { css } from "@emotion/core";
 
+import AddItem from "./AddItem";
 import Item from "./Item";
 import MainObject from "./MainObject";
 import { ItemContainer } from "./styledComponents";
 import { getColor } from "./utils";
 
 import type { Type as ItemValuesType } from "./Item";
+import type { NewItem } from "./AddItem";
 
 type ItemObjType = {|
   id: number,
@@ -23,9 +25,17 @@ type Props = {|
   items: ItemObjType[],
   ctas: ItemObjType[],
   maxCtas: number,
+  handleCreate: (string, NewItem) => void,
 |};
 
-function List({ id, name, items: _items, ctas: _ctas, maxCtas }: Props) {
+function List({
+  id,
+  name,
+  items: _items,
+  ctas: _ctas,
+  maxCtas,
+  handleCreate,
+}: Props) {
   const [items, setItems] = React.useState(_items);
   const [ctas, setCtas] = React.useState(_ctas);
 
@@ -81,6 +91,7 @@ function List({ id, name, items: _items, ctas: _ctas, maxCtas }: Props) {
           move={moveItem}
         />
       ))}
+      <AddItem to={id} onCreate={handleCreate} />
     </div>
   );
 }
