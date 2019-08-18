@@ -26,10 +26,10 @@ type Props = {|
   handleCreate: (string, NewItem) => void,
 |};
 
-function Grid({ data: _data, handleCreate }: Props) {
+function OOUXBoard({ data: _data, handleCreate }: Props) {
   const { data, maxCtas } = useBoard(_data);
   return (
-    <div css={cssGrid}>
+    <div css={cssBoard}>
       <DndProvider backend={HTML5Backend}>
         {data.map(list => (
           <List
@@ -47,9 +47,9 @@ function Grid({ data: _data, handleCreate }: Props) {
   );
 }
 
-export default Grid;
+export default OOUXBoard;
 
-const cssGrid = css`
+const cssBoard = css`
   display: flex;
   width: 100%;
 

@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 export const ItemContainer = styled.div`
   align-items: center;
   background ${props => (props.isDragging ? "transparent" : props.background)};
+  border: ${props => (props.isDragging ? "1px dashed #bbb" : "none")};
   box-sizing: border-box;
   color: ${props => (props.isDragging ? "transparent" : "#fff")};
   display: flex;
@@ -11,7 +12,7 @@ export const ItemContainer = styled.div`
   height: 90px;
   justify-content: center;
   padding: 5px;
+  position: relative;
   text-align: center;
   width: 90px;
-  border: ${props => (props.isDragging ? "1px dashed #bbb" : "none")};
 `;

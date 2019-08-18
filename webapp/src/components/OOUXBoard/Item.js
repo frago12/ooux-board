@@ -1,6 +1,8 @@
 // @flow
 import React from "react";
 
+import styled from "@emotion/styled";
+import { css } from "@emotion/core";
 import { useDrag, useDrop } from "react-dnd";
 
 import { ItemContainer } from "./styledComponents";
@@ -65,13 +67,38 @@ function Item({ index, name, id, type, listId, move }: Props) {
 
   return (
     <ItemContainer
+      css={cssContainer}
       background={getColor(type)}
       isDragging={isDragging}
       ref={ref}
+      tabIndex="0"
     >
+      <CloseButton className="closeButton">x</CloseButton>
       {name}
     </ItemContainer>
   );
 }
 
 export default Item;
+
+const CloseButton = styled.button`
+  background: ${props => props.background || "transparent"};
+  border: none;
+  color: #333;
+  cursor: pointer;
+  display: none;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+`;
+
+const cssContainer = css`
+  :hover {
+    .closeButton {
+      display: block;
+    }
+  }
+`;
