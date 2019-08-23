@@ -1,89 +1,60 @@
 // @flow
 import React from "react";
 
-import update from "immutability-helper";
+// $FlowFixMe
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { css } from "@emotion/core";
 
-import AddElement from "./AddElement";
 import Element from "./Element";
-import MainObject from "./SystemObject";
-import { ElementContainer } from "./styledComponents";
-import { getColor } from "./utils";
+import { ActionsContext } from ".";
 
 import type { ElementTypes } from "./Element";
 
-type ElementProps = {|
+export type ElementType = {|
   id: string,
   name: string,
   type: ElementTypes,
 |};
 
 type Props = {|
-  id: string,
-  name: string,
-  elements: ElementProps[],
-  ctas: ElementProps[],
-  maxCtas: number,
+  columnId: string,
+  items: ElementType[],
 |};
 
-function List({ id, name, elements: _elements, ctas: _ctas, maxCtas }: Props) {
-  const [elements, setElements] = React.useState(_elements);
-  const [ctas, setCtas] = React.useState(_ctas);
+function List({ columnId, items }: Props) {
+  const { onReorderElements } = React.useContext(ActionsContext);
 
-  const moveItem = React.useCallback(
-    (dragIndex, hoverIndex) => {
-      const dragItem = elements[dragIndex];
-      setElements(
-        update(elements, {
-          $splice: [[dragIndex, 1], [hoverIndex, 0, dragItem]],
-        }),
-      );
-    },
-    [elements],
-  );
+  const onDragEnd = result => {
+    // dropped outside the list
+    if (!result.destination) return;
 
-  const moveCta = React.useCallback(
-    (dragIndex, hoverIndex) => {
-      const dragItem = ctas[dragIndex];
-      setCtas(
-        update(ctas, {
-          $splice: [[dragIndex, 1], [hoverIndex, 0, dragItem]],
-        }),
-      );
-    },
-    [ctas],
-  );
+    onReorderElements(columnId, result.source.index, result.destination.index);
+  };
 
   return (
-    <div css={cssList}>
-      {[...Array(maxCtas - ctas.length).keys()].map(i => (
-        <ElementContainer key={i} background={getColor("empty")} />
-      ))}
-      {ctas.map((cta, index) => (
-        <Element
-          key={cta.id}
-          index={index}
-          name={cta.name}
-          id={cta.id}
-          type={cta.type}
-          listId={id}
-          move={moveCta}
-        />
-      ))}
-      <MainObject name={name} />
-      {elements.map((item, index) => (
-        <Element
-          key={item.id}
-          index={index}
-          name={item.name}
-          id={item.id}
-          type={item.type}
-          listId={id}
-          move={moveItem}
-        />
-      ))}
-      <AddElement to={id} />
-    </div>
+    <DragDropContext {...{ onDragEnd }}>
+      <Droppable droppableId="droppable">
+        {(provided, snapshot) => (
+          <div
+            css={cssList}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {items.map((item, index) => (
+              <Element
+                key={item.id}
+                index={index}
+                name={item.name}
+                id={item.id}
+                type={item.type}
+                columnId={columnId}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 }
 

@@ -10,13 +10,13 @@ const initialState = {
   isLoading: false,
   data: [
     {
-      id: "1",
+      id: "c1",
       systemObject: "OOUX Board",
       elements: [{ id: "1", type: "object", name: "Lists" }],
       ctas: [{ id: "1", type: "cta", name: "Add list" }],
     },
     {
-      id: "2",
+      id: "c2",
       systemObject: "List",
       elements: [
         { id: "1", type: "coredata", name: "Name" },
@@ -30,7 +30,7 @@ const initialState = {
       ],
     },
     {
-      id: "3",
+      id: "c3",
       systemObject: "Element / CTA",
       elements: [
         { id: "1", type: "coredata", name: "Name" },
@@ -46,19 +46,30 @@ const initialState = {
 
 function reducer(state, action) {
   return produce(state, draft => {
-    let listIndex = -1;
+    let columnIndex = -1;
 
     switch (action.type) {
       case "addElement":
-        listIndex = state.data.findIndex(l => l.id === action.payload.listId);
-        draft.data[listIndex].elements.push({ ...action.payload.item });
+        columnIndex = state.data.findIndex(
+          c => c.id === action.payload.columnId,
+        );
+        draft.data[columnIndex].elements.push({ ...action.payload.item });
         break;
       case "removeElement":
-        listIndex = state.data.findIndex(l => l.id === action.payload.listId);
-        const elementIndex = draft.data[listIndex].elements.findIndex(
+        columnIndex = state.data.findIndex(
+          c => c.id === action.payload.columnId,
+        );
+        const elementIndex = draft.data[columnIndex].elements.findIndex(
           e => e.id === action.payload.itemId,
         );
-        draft.data[listIndex].elements.splice(elementIndex, 1);
+        draft.data[columnIndex].elements.splice(elementIndex, 1);
+        break;
+      case "reorderElements":
+        const { columnId, startIndex, endIndex } = action.payload;
+        columnIndex = state.data.findIndex(c => c.id === columnId);
+        const result = draft.data[columnIndex].elements;
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
         break;
       default:
         throw new Error("Invalid board action");
@@ -73,23 +84,33 @@ function Board() {
     dispatch({
       type: "addElement",
       payload: {
-        listId: to,
+        columnId: to,
         item: { id: new Date().getTime().toString(), ...newItem },
       },
     });
   };
 
   const onRemoveElement = (from, id) => {
-    dispatch({ type: "removeElement", payload: { listId: from, itemId: id } });
+    dispatch({
+      type: "removeElement",
+      payload: { columnId: from, itemId: id },
+    });
   };
 
   const onEditElement = () => {};
+
+  const onReorderElements = (columnId, startIndex, endIndex) => {
+    dispatch({
+      type: "reorderElements",
+      payload: { columnId, startIndex, endIndex },
+    });
+  };
 
   return (
     <div css={cssBoard}>
       <OOUXBoard
         data={state.data}
-        {...{ onAddElement, onRemoveElement, onEditElement }}
+        {...{ onAddElement, onRemoveElement, onEditElement, onReorderElements }}
       />
     </div>
   );

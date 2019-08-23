@@ -1,33 +1,30 @@
 // @flow
 import * as React from "react";
 
-import HTML5Backend from "react-dnd-html5-backend";
-import { DndProvider } from "react-dnd";
 import { css } from "@emotion/core";
 
-import List from "./List";
+import Column from "./Column";
 
-import type { ElementTypes } from "./Element";
+import type { ElementType } from "./List";
 import type { NewElement } from "./AddElement";
-
-type Element = {|
-  id: string,
-  name: string,
-  type: ElementTypes,
-|};
 
 export type Data = Array<{
   id: string,
   systemObject: string,
-  elements: Element[],
-  ctas: Element[],
+  elements: ElementType[],
+  ctas: ElementType[],
 }>;
 
 type Props = {|
   data: Data,
-  onAddElement: (listId: string, item: NewElement) => void,
-  onRemoveElement: (listId: string, itemId: string) => void,
-  onEditElement: (listId: string, item: Element) => void,
+  onAddElement: (columnId: string, item: NewElement) => void,
+  onRemoveElement: (columnId: string, itemId: string) => void,
+  onEditElement: (columnId: string, item: Element) => void,
+  onReorderElements: (
+    columnId: string,
+    startIndex: number,
+    endIndex: number,
+  ) => void,
 |};
 
 // $FlowFixMe
@@ -38,11 +35,12 @@ function OOUXBoard({
   onAddElement,
   onRemoveElement,
   onEditElement,
+  onReorderElements,
 }: Props) {
   const maxCtas = React.useMemo(() => {
     let maxCtas = 0;
-    data.forEach(list => {
-      if (list.ctas.length > maxCtas) maxCtas = list.ctas.length;
+    data.forEach(column => {
+      if (column.ctas.length > maxCtas) maxCtas = column.ctas.length;
     });
 
     return maxCtas;
@@ -51,20 +49,23 @@ function OOUXBoard({
   return (
     <div css={cssBoard}>
       <ActionsContext.Provider
-        value={{ onAddElement, onRemoveElement, onEditElement }}
+        value={{
+          onAddElement,
+          onRemoveElement,
+          onEditElement,
+          onReorderElements,
+        }}
       >
-        <DndProvider backend={HTML5Backend}>
-          {data.map(list => (
-            <List
-              key={`${list.systemObject}-${list.elements.length}-${list.ctas.length}`}
-              id={list.id}
-              name={list.systemObject}
-              elements={list.elements}
-              ctas={list.ctas}
-              maxCtas={maxCtas}
-            />
-          ))}
-        </DndProvider>
+        {data.map(column => (
+          <Column
+            key={column.id}
+            id={column.id}
+            name={column.systemObject}
+            elements={column.elements}
+            ctas={column.ctas}
+            maxCtas={maxCtas}
+          />
+        ))}
       </ActionsContext.Provider>
     </div>
   );

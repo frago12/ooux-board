@@ -1,5 +1,5 @@
 [ignore]
-<PROJECT_ROOT>/node_modules/.registry.npmjs.org/unstated/2.1.1/node_modules/unstated/lib/unstated.js.flow
+<PROJECT_ROOT>/node_modules/react-beautiful-dnd/.*
 
 [include]
 
@@ -10,7 +10,6 @@ sketchy-null=warn
 
 [options]
 include_warnings=true
-module.file_ext=.js
 module.system.node.resolve_dirname=node_modules
 module.system.node.resolve_dirname=./src
 
