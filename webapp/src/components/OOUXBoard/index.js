@@ -6,43 +6,66 @@ import { DndProvider } from "react-dnd";
 import { css } from "@emotion/core";
 
 import List from "./List";
-import useBoard from "./useBoard";
 
-import type { Type as ItemValuesType } from "./Item";
-import type { NewItem } from "./AddItem";
+import type { ElementTypes } from "./Element";
+import type { NewElement } from "./AddElement";
+
+type Element = {|
+  id: string,
+  name: string,
+  type: ElementTypes,
+|};
 
 export type Data = Array<{
   id: string,
-  objectName: string,
-  data: Array<{|
-    id: number,
-    name: string,
-    type: ItemValuesType,
-  |}>,
+  systemObject: string,
+  elements: Element[],
+  ctas: Element[],
 }>;
 
 type Props = {|
   data: Data,
-  handleCreate: (string, NewItem) => void,
+  onAddElement: (listId: string, item: NewElement) => void,
+  onRemoveElement: (listId: string, itemId: string) => void,
+  onEditElement: (listId: string, item: Element) => void,
 |};
 
-function OOUXBoard({ data: _data, handleCreate }: Props) {
-  const { data, maxCtas } = useBoard(_data);
+// $FlowFixMe
+export const ActionsContext = React.createContext({});
+
+function OOUXBoard({
+  data,
+  onAddElement,
+  onRemoveElement,
+  onEditElement,
+}: Props) {
+  const maxCtas = React.useMemo(() => {
+    let maxCtas = 0;
+    data.forEach(list => {
+      if (list.ctas.length > maxCtas) maxCtas = list.ctas.length;
+    });
+
+    return maxCtas;
+  }, [data]);
+
   return (
     <div css={cssBoard}>
-      <DndProvider backend={HTML5Backend}>
-        {data.map(list => (
-          <List
-            key={`${list.objectName}-${list.items.length}-${list.ctas.length}`}
-            id={list.id}
-            name={list.objectName}
-            items={list.items}
-            ctas={list.ctas}
-            maxCtas={maxCtas}
-            handleCreate={handleCreate}
-          />
-        ))}
-      </DndProvider>
+      <ActionsContext.Provider
+        value={{ onAddElement, onRemoveElement, onEditElement }}
+      >
+        <DndProvider backend={HTML5Backend}>
+          {data.map(list => (
+            <List
+              key={`${list.systemObject}-${list.elements.length}-${list.ctas.length}`}
+              id={list.id}
+              name={list.systemObject}
+              elements={list.elements}
+              ctas={list.ctas}
+              maxCtas={maxCtas}
+            />
+          ))}
+        </DndProvider>
+      </ActionsContext.Provider>
     </div>
   );
 }

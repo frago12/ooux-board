@@ -4,51 +4,42 @@ import React from "react";
 import update from "immutability-helper";
 import { css } from "@emotion/core";
 
-import AddItem from "./AddItem";
-import Item from "./Item";
-import MainObject from "./MainObject";
-import { ItemContainer } from "./styledComponents";
+import AddElement from "./AddElement";
+import Element from "./Element";
+import MainObject from "./SystemObject";
+import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
 
-import type { Type as ItemValuesType } from "./Item";
-import type { NewItem } from "./AddItem";
+import type { ElementTypes } from "./Element";
 
-type ItemObjType = {|
-  id: number,
+type ElementProps = {|
+  id: string,
   name: string,
-  type: ItemValuesType,
+  type: ElementTypes,
 |};
 
 type Props = {|
   id: string,
   name: string,
-  items: ItemObjType[],
-  ctas: ItemObjType[],
+  elements: ElementProps[],
+  ctas: ElementProps[],
   maxCtas: number,
-  handleCreate: (string, NewItem) => void,
 |};
 
-function List({
-  id,
-  name,
-  items: _items,
-  ctas: _ctas,
-  maxCtas,
-  handleCreate,
-}: Props) {
-  const [items, setItems] = React.useState(_items);
+function List({ id, name, elements: _elements, ctas: _ctas, maxCtas }: Props) {
+  const [elements, setElements] = React.useState(_elements);
   const [ctas, setCtas] = React.useState(_ctas);
 
   const moveItem = React.useCallback(
     (dragIndex, hoverIndex) => {
-      const dragItem = items[dragIndex];
-      setItems(
-        update(items, {
+      const dragItem = elements[dragIndex];
+      setElements(
+        update(elements, {
           $splice: [[dragIndex, 1], [hoverIndex, 0, dragItem]],
         }),
       );
     },
-    [items],
+    [elements],
   );
 
   const moveCta = React.useCallback(
@@ -66,32 +57,32 @@ function List({
   return (
     <div css={cssList}>
       {[...Array(maxCtas - ctas.length).keys()].map(i => (
-        <ItemContainer key={i} background={getColor("empty")} />
+        <ElementContainer key={i} background={getColor("empty")} />
       ))}
       {ctas.map((cta, index) => (
-        <Item
+        <Element
           key={cta.id}
           index={index}
           name={cta.name}
           id={cta.id}
           type={cta.type}
-          listId={`${id}ctas`}
+          listId={id}
           move={moveCta}
         />
       ))}
       <MainObject name={name} />
-      {items.map((item, index) => (
-        <Item
+      {elements.map((item, index) => (
+        <Element
           key={item.id}
           index={index}
           name={item.name}
           id={item.id}
           type={item.type}
-          listId={`${id}items`}
+          listId={id}
           move={moveItem}
         />
       ))}
-      <AddItem to={id} onCreate={handleCreate} />
+      <AddElement to={id} />
     </div>
   );
 }

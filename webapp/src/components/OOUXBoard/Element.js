@@ -5,21 +5,23 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/core";
 import { useDrag, useDrop } from "react-dnd";
 
-import { ItemContainer } from "./styledComponents";
+import { ActionsContext } from ".";
+import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
 
-export type Type = "object" | "coredata" | "metadata" | "cta";
+export type ElementTypes = "object" | "coredata" | "metadata" | "cta";
 
 type Props = {|
   index: number,
   name: string,
-  id: number,
-  type: Type,
+  id: string,
+  type: ElementTypes,
   listId: string,
   move: (number, number) => void,
 |};
 
-function Item({ index, name, id, type, listId, move }: Props) {
+function Element({ index, name, id, type, listId, move }: Props) {
+  const { onRemoveElement } = React.useContext(ActionsContext);
   const ref = React.useRef(null);
   const [, drop] = useDrop({
     // TODO: update this when working with multiple lists
@@ -65,21 +67,31 @@ function Item({ index, name, id, type, listId, move }: Props) {
 
   drag(drop(ref));
 
+  const onClickRemove = () => {
+    onRemoveElement(listId, id);
+  };
+
   return (
-    <ItemContainer
+    <ElementContainer
       css={cssContainer}
       background={getColor(type)}
       isDragging={isDragging}
       ref={ref}
       tabIndex="0"
     >
-      <CloseButton className="closeButton">x</CloseButton>
+      <CloseButton
+        className="closeButton"
+        type="button"
+        onClick={onClickRemove}
+      >
+        x
+      </CloseButton>
       {name}
-    </ItemContainer>
+    </ElementContainer>
   );
 }
 
-export default Item;
+export default Element;
 
 const CloseButton = styled.button`
   background: ${props => props.background || "transparent"};

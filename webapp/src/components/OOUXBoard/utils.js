@@ -1,5 +1,5 @@
 // @flow
-import type { Type } from "./Item";
+import type { ElementTypes } from "./Element";
 
 const colors = {
   blue: "#5BAFF8",
@@ -8,7 +8,7 @@ const colors = {
   green: "#68CD67",
 };
 
-export function getColor(type: Type) {
+export function getColor(type: "empty" | ElementTypes) {
   switch (type) {
     case "object":
       return colors.blue;

@@ -4,33 +4,41 @@ import React from "react";
 import produce from "immer";
 import { css } from "@emotion/core";
 
-import Grid from "components/Grid";
+import OOUXBoard from "components/OOUXBoard";
 
 const initialState = {
   isLoading: false,
   data: [
     {
-      id: "123",
-      objectName: "Chef",
-      data: [
-        { id: 1, type: "coredata", name: "Name" },
-        { id: 2, type: "coredata", name: "Profile pic" },
-        { id: 3, type: "object", name: "Recipes" },
-        { id: 4, type: "metadata", name: "# of chef followers" },
-        { id: 5, type: "cta", name: "Follow" },
-        { id: 6, type: "cta", name: "Favorite" },
-        { id: 7, type: "cta", name: "Create, Edit, Delete" },
+      id: "1",
+      systemObject: "OOUX Board",
+      elements: [{ id: "1", type: "object", name: "Lists" }],
+      ctas: [{ id: "1", type: "cta", name: "Add list" }],
+    },
+    {
+      id: "2",
+      systemObject: "List",
+      elements: [
+        { id: "1", type: "coredata", name: "Name" },
+        { id: "2", type: "object", name: "Elements" },
+        { id: "3", type: "object", name: "CTAs" },
+      ],
+      ctas: [
+        { id: "1", type: "cta", name: "Add element" },
+        { id: "2", type: "cta", name: "Add cta" },
+        { id: "3", type: "cta", name: "Remove" },
       ],
     },
     {
-      id: "456",
-      objectName: "Recipe",
-      data: [
-        { id: 1, type: "coredata", name: "Title" },
-        { id: 2, type: "coredata", name: "Images" },
-        { id: 3, type: "metadata", name: "Level of dificulty" },
-        { id: 4, type: "cta", name: "Favorite" },
-        { id: 5, type: "cta", name: "Create, Edit, Delete" },
+      id: "3",
+      systemObject: "Element / CTA",
+      elements: [
+        { id: "1", type: "coredata", name: "Name" },
+        { id: "2", type: "coredata", name: "Type" },
+      ],
+      ctas: [
+        { id: "1", type: "cta", name: "Remove" },
+        { id: "2", type: "cta", name: "Edit name" },
       ],
     },
   ],
@@ -38,10 +46,19 @@ const initialState = {
 
 function reducer(state, action) {
   return produce(state, draft => {
+    let listIndex = -1;
+
     switch (action.type) {
-      case "add":
-        const index = state.data.findIndex(l => l.id === action.payload.listId);
-        draft.data[index].data.push({ ...action.payload.item });
+      case "addElement":
+        listIndex = state.data.findIndex(l => l.id === action.payload.listId);
+        draft.data[listIndex].elements.push({ ...action.payload.item });
+        break;
+      case "removeElement":
+        listIndex = state.data.findIndex(l => l.id === action.payload.listId);
+        const elementIndex = draft.data[listIndex].elements.findIndex(
+          e => e.id === action.payload.itemId,
+        );
+        draft.data[listIndex].elements.splice(elementIndex, 1);
         break;
       default:
         throw new Error("Invalid board action");
@@ -51,16 +68,29 @@ function reducer(state, action) {
 
 function Board() {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const handleCreate = (to, newItem) => {
+
+  const onAddElement = (to, newItem) => {
     dispatch({
-      type: "add",
-      payload: { listId: to, item: { id: new Date().getTime(), ...newItem } },
+      type: "addElement",
+      payload: {
+        listId: to,
+        item: { id: new Date().getTime().toString(), ...newItem },
+      },
     });
   };
 
+  const onRemoveElement = (from, id) => {
+    dispatch({ type: "removeElement", payload: { listId: from, itemId: id } });
+  };
+
+  const onEditElement = () => {};
+
   return (
     <div css={cssBoard}>
-      <Grid data={state.data} handleCreate={handleCreate} />
+      <OOUXBoard
+        data={state.data}
+        {...{ onAddElement, onRemoveElement, onEditElement }}
+      />
     </div>
   );
 }

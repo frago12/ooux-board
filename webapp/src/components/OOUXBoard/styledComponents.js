@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const ItemContainer = styled.div`
+export const ElementContainer = styled.div`
   align-items: center;
   background ${props => (props.isDragging ? "transparent" : props.background)};
   border: ${props => (props.isDragging ? "1px dashed #bbb" : "none")};
