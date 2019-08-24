@@ -47,25 +47,33 @@ const initialState = {
 function reducer(state, action) {
   return produce(state, draft => {
     let columnIndex = -1;
+    let elementIndex = -1;
+
+    const { columnId } = action.payload;
 
     switch (action.type) {
       case "addElement":
-        columnIndex = state.data.findIndex(
-          c => c.id === action.payload.columnId,
-        );
+        columnIndex = state.data.findIndex(c => c.id === columnId);
         draft.data[columnIndex].elements.push({ ...action.payload.item });
         break;
-      case "removeElement":
-        columnIndex = state.data.findIndex(
-          c => c.id === action.payload.columnId,
+      case "editElement":
+        const { item } = action.payload;
+        columnIndex = state.data.findIndex(c => c.id === columnId);
+        elementIndex = draft.data[columnIndex].elements.findIndex(
+          e => e.id === item.id,
         );
-        const elementIndex = draft.data[columnIndex].elements.findIndex(
-          e => e.id === action.payload.itemId,
+        draft.data[columnIndex].elements[elementIndex] = item;
+        break;
+      case "removeElement":
+        const { itemId } = action.payload;
+        columnIndex = state.data.findIndex(c => c.id === columnId);
+        elementIndex = draft.data[columnIndex].elements.findIndex(
+          e => e.id === itemId,
         );
         draft.data[columnIndex].elements.splice(elementIndex, 1);
         break;
       case "reorderElements":
-        const { columnId, startIndex, endIndex } = action.payload;
+        const { startIndex, endIndex } = action.payload;
         columnIndex = state.data.findIndex(c => c.id === columnId);
         const result = draft.data[columnIndex].elements;
         const [removed] = result.splice(startIndex, 1);
@@ -97,7 +105,9 @@ function Board() {
     });
   };
 
-  const onEditElement = () => {};
+  const onEditElement = (columnId, item) => {
+    dispatch({ type: "editElement", payload: { columnId, item } });
+  };
 
   const onReorderElements = (columnId, startIndex, endIndex) => {
     dispatch({

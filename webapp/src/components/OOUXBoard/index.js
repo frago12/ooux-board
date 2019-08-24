@@ -19,7 +19,7 @@ type Props = {|
   data: Data,
   onAddElement: (columnId: string, item: NewElement) => void,
   onRemoveElement: (columnId: string, itemId: string) => void,
-  onEditElement: (columnId: string, item: Element) => void,
+  onEditElement: (columnId: string, item: ElementType) => void,
   onReorderElements: (
     columnId: string,
     startIndex: number,

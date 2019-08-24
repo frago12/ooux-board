@@ -31,9 +31,9 @@ function Column({ id, name, elements, ctas, maxCtas }: Props) {
       {[...Array(maxCtas - ctas.length).keys()].map(i => (
         <ElementContainer key={i} background={getColor("empty")} />
       ))}
-      <List columnId={id} items={ctas} dragEndAction="reorderCtas" />
+      <List columnId={id} items={ctas} />
       <MainObject name={name} />
-      <List columnId={id} items={elements} dragEndAction="reorderElements" />
+      <List columnId={id} items={elements} />
       <AddElement to={id} />
     </div>
   );

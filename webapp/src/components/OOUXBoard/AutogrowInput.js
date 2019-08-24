@@ -14,13 +14,17 @@ function AutogrowInput({ onSubmit, onCancel, defaultValue }: Props) {
   const inputRef: { current: any } = React.createRef();
 
   React.useEffect(() => {
-    if (inputRef.current !== null) inputRef.current.focus();
+    if (inputRef.current !== null) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
   }, [inputRef]);
 
   const onKeyPress = e => {
     const value = inputRef.current.value;
     if (e.key === "Enter" && value) {
       onSubmit(value);
+      e.preventDefault();
     } else if (e.key === "Enter" && !value) {
       e.preventDefault();
     }
@@ -41,6 +45,7 @@ function AutogrowInput({ onSubmit, onCancel, defaultValue }: Props) {
       ref={inputRef}
       onBlur={onBlur}
       onKeyPress={onKeyPress}
+      defaultValue={defaultValue}
     />
   );
 }

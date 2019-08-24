@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import { Draggable } from "react-beautiful-dnd";
 import { css } from "@emotion/core";
 
+import AutogrowInput from "./AutogrowInput";
 import { ActionsContext } from ".";
 import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
@@ -21,10 +22,24 @@ type Props = {|
 |};
 
 function Element({ index, name, id, type, columnId }: Props) {
-  const { onRemoveElement } = React.useContext(ActionsContext);
+  const [editMode, setEditMode] = React.useState(false);
+  const { onRemoveElement, onEditElement } = React.useContext(ActionsContext);
 
   const onClickRemove = () => {
     onRemoveElement(columnId, id);
+  };
+
+  const onDoubleClick = () => {
+    setEditMode(true);
+  };
+
+  const submit = value => {
+    onEditElement(columnId, { id, name: value, type });
+    cancel();
+  };
+
+  const cancel = () => {
+    setEditMode(false);
   };
 
   return (
@@ -37,6 +52,7 @@ function Element({ index, name, id, type, columnId }: Props) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
+          onDoubleClick={onDoubleClick}
         >
           <CloseButton
             className="closeButton"
@@ -45,7 +61,15 @@ function Element({ index, name, id, type, columnId }: Props) {
           >
             x
           </CloseButton>
-          {name}
+          {editMode ? (
+            <AutogrowInput
+              defaultValue={name}
+              onSubmit={submit}
+              onCancel={cancel}
+            />
+          ) : (
+            name
+          )}
         </ElementContainer>
       )}
     </Draggable>
