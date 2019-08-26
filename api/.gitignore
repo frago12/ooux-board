@@ -1,0 +1,9 @@
+*.pyc
+.DS_Store
+db.sqlite3
+*.egg-info
+*.pot
+*.py[co]
+.tox/
+__pycache__
+MANIFEST
