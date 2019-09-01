@@ -1,0 +1,26 @@
+# Build react app
+FROM node:lts as react
+ARG NODE_ENV=production
+
+WORKDIR /app
+COPY ./webapp ./
+RUN npm install
+RUN npm run build
+
+# Build django static
+FROM python:3.7 as django
+
+WORKDIR /app
+RUN pip install pipenv
+COPY api/Pipfile* ./
+RUN pipenv install --system --deploy --keep-outdated
+
+COPY ./api ./
+RUN python manage.py collectstatic --noinput
+
+# NGINX server
+FROM nginx:stable as nginx
+
+COPY ./docker/prod/nginx-conf /etc/nginx
+COPY --from=django /public/admin /public/admin
+COPY --from=react /app/build /public/app

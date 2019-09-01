@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    container_name: ooux-api
+    env_file:
+      - .env
+    volumes:
+      - ./api:/app/api
+    working_dir: /app/api
+    command: bin/api-dev-server.sh
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - api
+
+  db:
+    image: postgres:11.5
+    container_name: ooux-db
+    hostname: db
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/db:/var/lib/postgresql/data:delegated
+    healthcheck:
+      test: pg_isready -U postgres || exit 1
+    networks:
+      - api
+
+networks:
+  api:

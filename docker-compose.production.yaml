@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  api-server:
+    build:
+      context: .
+      dockerfile: docker/prod/Dockerfile
+    image: ooux/server
+    container_name: ooux-web
+    restart: unless-stopped
+    env_file:
+      - .env
+    working_dir: /app
+    command: bin/server.sh
+    depends_on:
+      - db
+    networks:
+      - web
+
+  db:
+    image: postgres:11.5
+    container_name: ooux-db
+    hostname: db
+    env_file:
+      - .env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data:delegated
+    healthcheck:
+      test: pg_isready -U postgres || exit 1
+    networks:
+      - web
+
+  nginx:
+    image: ooux/nginx
+    container_name: ooux-nginx
+    ports:
+      - 8080:80
+    depends_on:
+      - api-server
+    networks:
+      - web
+
+networks:
+  web:
