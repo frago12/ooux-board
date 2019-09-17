@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/dev/Dockerfile
+    image: ooux/dev-api
     container_name: ooux-api
     env_file:
       - .env

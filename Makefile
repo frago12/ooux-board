@@ -13,3 +13,18 @@ down:
 
 remove-images:
 	docker rmi $(docker images -f 'dangling=true' --no-trunc --quiet)
+
+dev-build:
+	docker-compose build api
+
+dev-up:
+	docker-compose up api
+
+dev-interactive:
+	docker-compose run --rm --service-ports --name api api
+
+shell-dev:
+	docker-compose run --rm --no-deps /bin/bash
+
+test:
+	docker-compose run --rm api python manage.py test

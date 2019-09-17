@@ -1,13 +1,35 @@
 import React from "react";
 
-import Board from "./views/Board";
+import {
+  ToastsContainer,
+  ToastsContainerPosition,
+  ToastsStore,
+} from "react-toasts";
 
-function App() {
+import AuthenticatedApp from "./AuthenticatedApp";
+import UnauthenticatedApp from "./UnauthenticatedApp";
+import { useAuth } from "context/AuthContext";
+
+function AppRouter() {
+  const {
+    data: { user, loading },
+  } = useAuth();
+
   return (
-    <div className="App">
-      <Board />
-    </div>
+    <>
+      {loading ? (
+        <div>Loading...</div>
+      ) : user ? (
+        <AuthenticatedApp />
+      ) : (
+        <UnauthenticatedApp />
+      )}
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.TOP_RIGHT}
+      />
+    </>
   );
 }
 
-export default App;
+export default AppRouter;

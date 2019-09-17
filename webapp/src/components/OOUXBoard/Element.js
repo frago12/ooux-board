@@ -55,7 +55,7 @@ function Element({ index, name, id, type, columnId }: Props) {
           onDoubleClick={onDoubleClick}
         >
           <CloseButton
-            className="closeButton"
+            css"closeButton"
             type="button"
             onClick={onClickRemove}
           >
