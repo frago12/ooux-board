@@ -34,4 +34,7 @@ export const register = (email, password, password2) =>
     },
   );
 
+export const logout = () =>
+  withErrorHandling(() => request("/api/users/logout/"));
+
 export const me = () => withErrorHandling(() => request("/api/users/me/"));

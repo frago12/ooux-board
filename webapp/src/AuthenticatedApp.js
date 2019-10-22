@@ -3,16 +3,14 @@ import React from "react";
 
 import { Router } from "@reach/router";
 
+import MyBoards from "views/MyBoards";
+
 function AuthenticatedApp() {
   return (
     <Router>
-      <Home path="/" />
+      <MyBoards path="/" />
     </Router>
   );
 }
 
 export default AuthenticatedApp;
-
-function Home() {
-  return <div>Home</div>;
-}

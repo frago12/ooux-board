@@ -49,7 +49,7 @@ def signin(request):
 @require_GET
 def signout(request):
     logout(request)
-    return SuccessResponse(None)
+    return SuccessResponse()
 
 
 @require_GET

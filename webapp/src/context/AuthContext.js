@@ -4,6 +4,7 @@ import * as React from "react";
 import { navigate } from "@reach/router";
 
 import * as AuthApi from "utils/apiClient/auth";
+import { setDispatch } from "utils/request";
 
 type User = {| email: string |};
 
@@ -46,6 +47,8 @@ function reducer(state, action) {
       return { ...state, user: { email }, loading: false };
     case "isLoading":
       return { ...state, loading: true };
+    case "logout":
+      return { ...state, user: null, loading: false };
     default:
       throw new Error("Invalid Auth action");
   }
@@ -58,6 +61,7 @@ export function AuthProvider(props: Props) {
   );
 
   React.useEffect(() => {
+    setDispatch(dispatch);
     me();
   }, []);
 
@@ -93,7 +97,11 @@ export function AuthProvider(props: Props) {
     navigate("/");
   };
 
-  const logout = () => {};
+  const logout = async () => {
+    await AuthApi.logout();
+    dispatch({ type: "logout" });
+    navigate("/");
+  };
 
   return (
     <AuthContex.Provider value={{ data, login, logout, register }} {...props} />

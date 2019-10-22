@@ -1,17 +1,8 @@
 // @flow
-function status(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response);
-  } else {
-    return Promise.reject({
-      status: response.status,
-      message: response.statusText,
-    });
-  }
-}
+let dispatch = null;
 
-function json(response) {
-  return response.json();
+export function setDispatch(_dispatch) {
+  dispatch = _dispatch;
 }
 
 type Config = {|
@@ -19,7 +10,7 @@ type Config = {|
   body: { [any]: any },
 |};
 
-function FetchRequest(url: string, config: Config = {}) {
+function FetchRequest(url: string, config: Config = {}, on401) {
   const csrftoken = getCookie("csrftoken");
 
   if (!config.method) config.method = "get";
@@ -46,13 +37,28 @@ function FetchRequest(url: string, config: Config = {}) {
     .then(data => data)
     .catch(error => {
       if (error.status === 401 || error.status === 403) {
-        return (window.location.href = "/login");
+        dispatch({ type: "logout" });
       }
       throw error;
     });
 }
 
 export default FetchRequest;
+
+function status(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return Promise.resolve(response);
+  } else {
+    return Promise.reject({
+      status: response.status,
+      message: response.statusText,
+    });
+  }
+}
+
+function json(response) {
+  return response.json();
+}
 
 function getCookie(name) {
   var cookieValue = null;

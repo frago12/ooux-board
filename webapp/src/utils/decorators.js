@@ -6,7 +6,8 @@ export async function withErrorHandling(fn, onError) {
     return await fn();
   } catch (error) {
     if (onError) return onError(error);
-    ToastsStore.error("Something went wrong");
+    else if (error.status === 401) return error;
+    else ToastsStore.error("Something went wrong");
     return error;
   }
 }
