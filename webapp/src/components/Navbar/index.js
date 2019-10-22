@@ -6,8 +6,8 @@ import { css } from "@emotion/core";
 import { H1 } from "styles/components";
 
 type Props = {|
-  email: string,
-  logout: () => void,
+  user: { email: string } | null,
+  logout: () => Promise<void>,
 |};
 
 function Navbar({ user, logout }: Props) {

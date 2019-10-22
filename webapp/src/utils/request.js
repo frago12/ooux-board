@@ -1,23 +1,25 @@
 // @flow
-let dispatch = null;
+type Dispatch = () => void;
 
-export function setDispatch(_dispatch) {
+let dispatch: ?Dispatch = null;
+
+export function setDispatch(_dispatch: Dispatch) {
   dispatch = _dispatch;
 }
 
-type Config = {|
-  method: string,
-  body: { [any]: any },
-|};
+type Config = {
+  method?: string,
+  // $FlowFixMe
+  body?: { [any]: any },
+};
 
-function FetchRequest(url: string, config: Config = {}, on401) {
+function FetchRequest(url: string, config: Config = {}) {
   const csrftoken = getCookie("csrftoken");
 
-  if (!config.method) config.method = "get";
+  if (config.method === undefined) config.method = "get";
 
   config.method = config.method.toUpperCase();
 
-  // stringify data for POST and PUT requests
   if ((config.method === "POST" || config.method === "PUT") && config.body) {
     config.body = JSON.stringify(config.body);
   }
@@ -37,6 +39,7 @@ function FetchRequest(url: string, config: Config = {}, on401) {
     .then(data => data)
     .catch(error => {
       if (error.status === 401 || error.status === 403) {
+        // $FlowFixMe
         dispatch({ type: "logout" });
       }
       throw error;
@@ -61,7 +64,7 @@ function json(response) {
 }
 
 function getCookie(name) {
-  var cookieValue = null;
+  var cookieValue = "";
   if (document.cookie && document.cookie !== "") {
     var cookies = document.cookie.split(";");
     for (var i = 0; i < cookies.length; i++) {

@@ -1,6 +1,7 @@
 // @flow
 import { ToastsStore } from "react-toasts";
 
+// $FlowFixMe
 export async function withErrorHandling(fn, onError) {
   try {
     return await fn();

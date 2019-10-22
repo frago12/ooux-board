@@ -4,7 +4,7 @@ import { ToastsStore } from "react-toasts";
 import request from "utils/request";
 import { withErrorHandling } from "utils/decorators";
 
-export const login = (email, password) =>
+export const login = (email: string, password: string) =>
   withErrorHandling(
     () =>
       request("/api/users/login/", {
@@ -19,7 +19,7 @@ export const login = (email, password) =>
     },
   );
 
-export const register = (email, password, password2) =>
+export const register = (email: string, password: string, password2: string) =>
   withErrorHandling(
     () =>
       request("/api/users/register/", {

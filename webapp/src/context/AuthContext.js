@@ -9,15 +9,13 @@ import { setDispatch } from "utils/request";
 type User = {| email: string |};
 
 type State = {|
-  user: User,
-  loading: Boolean,
+  user: User | null,
+  loading: boolean,
 |};
 
 type Action = {|
   type: string,
-  payload: {
-    email: string,
-  },
+  payload: { [any]: any },
 |};
 
 type Props = {|
@@ -26,9 +24,9 @@ type Props = {|
 
 type Context = {|
   data: State,
-  login: (email: string, password: string) => void,
-  logout: () => void,
-  register: (email: string, password: string, repeat: string) => void,
+  login: (email: string, password: string) => Promise<void>,
+  logout: () => Promise<void>,
+  register: (email: string, password: string, repeat: string) => Promise<void>,
 |};
 
 const AuthContex = React.createContext<Context | void>();
@@ -61,6 +59,7 @@ export function AuthProvider(props: Props) {
   );
 
   React.useEffect(() => {
+    // $FlowFixMe
     setDispatch(dispatch);
     me();
   }, []);
@@ -99,6 +98,7 @@ export function AuthProvider(props: Props) {
 
   const logout = async () => {
     await AuthApi.logout();
+    // $FlowFixMe
     dispatch({ type: "logout" });
     navigate("/");
   };

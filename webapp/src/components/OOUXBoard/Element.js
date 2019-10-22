@@ -54,11 +54,7 @@ function Element({ index, name, id, type, columnId }: Props) {
           {...provided.dragHandleProps}
           onDoubleClick={onDoubleClick}
         >
-          <CloseButton
-            css"closeButton"
-            type="button"
-            onClick={onClickRemove}
-          >
+          <CloseButton type="button" onClick={onClickRemove}>
             x
           </CloseButton>
           {editMode ? (
