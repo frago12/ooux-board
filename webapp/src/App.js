@@ -1,6 +1,8 @@
 // @flow
 import React from "react";
 
+import { css } from "@emotion/core";
+
 import {
   ToastsContainer,
   ToastsContainerPosition,
@@ -21,13 +23,15 @@ function AppRouter() {
   return (
     <>
       <Navbar user={user} logout={logout} />
-      {loading ? (
-        <div>Loading...</div>
-      ) : user ? (
-        <AuthenticatedApp />
-      ) : (
-        <UnauthenticatedApp />
-      )}
+      <div css={cssMainContainer}>
+        {loading ? (
+          <div>Loading...</div>
+        ) : user ? (
+          <AuthenticatedApp />
+        ) : (
+          <UnauthenticatedApp />
+        )}
+      </div>
       <ToastsContainer
         store={ToastsStore}
         position={ToastsContainerPosition.TOP_RIGHT}
@@ -37,3 +41,7 @@ function AppRouter() {
 }
 
 export default AppRouter;
+
+const cssMainContainer = css`
+  padding: 0 40px;
+`;
