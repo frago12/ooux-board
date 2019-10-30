@@ -22,7 +22,7 @@ function AppRouter() {
 
   return (
     <>
-      <Navbar user={user} logout={logout} />
+      <Navbar user = {user} logout={logout} />
       <div css={cssMainContainer}>
         {loading ? (
           <div>Loading...</div>

@@ -8,7 +8,7 @@ import { textColors } from "styles/variables";
 
 function NewBoard() {
   return (
-    <Link to="new" css={cssNewBoard}>
+    <Link to="b/new" css={cssNewBoard}>
       Create new board
     </Link>
   );
