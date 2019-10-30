@@ -7,7 +7,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { css } from "@emotion/core";
 
 import AutogrowInput from "./AutogrowInput";
-import { ActionsContext } from ".";
+import { useOOUX } from "./OOUXContext";
 import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
 
@@ -23,10 +23,13 @@ type Props = {|
 
 function Element({ index, name, id, type, columnId }: Props) {
   const [editMode, setEditMode] = React.useState(false);
-  const { onRemoveElement, onEditElement } = React.useContext(ActionsContext);
+  const { dispatch } = useOOUX();
 
   const onClickRemove = () => {
-    onRemoveElement(columnId, id);
+    dispatch({
+      type: "removeElement",
+      payload: { columnId, itemId: id },
+    });
   };
 
   const onDoubleClick = () => {
@@ -34,7 +37,10 @@ function Element({ index, name, id, type, columnId }: Props) {
   };
 
   const submit = value => {
-    onEditElement(columnId, { id, name: value, type });
+    dispatch({
+      type: "editElement",
+      payload: { columnId, item: { id, name: value, type } },
+    });
     cancel();
   };
 
@@ -54,7 +60,11 @@ function Element({ index, name, id, type, columnId }: Props) {
           {...provided.dragHandleProps}
           onDoubleClick={onDoubleClick}
         >
-          <CloseButton type="button" onClick={onClickRemove}>
+          <CloseButton
+            type="button"
+            className="closeButton"
+            onClick={onClickRemove}
+          >
             x
           </CloseButton>
           {editMode ? (

@@ -6,7 +6,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { css } from "@emotion/core";
 
 import Element from "./Element";
-import { ActionsContext } from ".";
+import { useOOUX } from "./OOUXContext";
 
 import type { ElementTypes } from "./Element";
 
@@ -22,13 +22,20 @@ type Props = {|
 |};
 
 function List({ columnId, items }: Props) {
-  const { onReorderElements } = React.useContext(ActionsContext);
+  const { dispatch } = useOOUX();
 
   const onDragEnd = result => {
     // dropped outside the list
     if (!result.destination) return;
 
-    onReorderElements(columnId, result.source.index, result.destination.index);
+    dispatch({
+      type: "reorderElements",
+      payload: {
+        columnId,
+        startIndex: result.source.index,
+        endIndex: result.destination.index,
+      },
+    });
   };
 
   return (

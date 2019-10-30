@@ -2,28 +2,32 @@
 import React from "react";
 
 import TextareaAutosize from "react-autosize-textarea";
-import { css } from "@emotion/core";
 
 type Props = {|
   defaultValue?: string,
+  placeholder?: string,
   onCancel: () => void,
   onSubmit: (value: string) => void,
+  styles: { [any]: any },
 |};
 
-function AutogrowInput({ onSubmit, onCancel, defaultValue }: Props) {
-  const inputRef: { current: any } = React.createRef();
+function AutogrowInput({ styles, onSubmit, onCancel, defaultValue, placeholder = 'Entrer title' }: Props) {
+  const inputRef: { current: any } = React.useMemo(() => React.createRef(), []);
 
   React.useEffect(() => {
-    if (inputRef.current !== null) {
-      inputRef.current.focus();
-      inputRef.current.select();
-    }
+    inputRef.current.focus();
+    inputRef.current.select();
   }, [inputRef]);
+
+  const onClick = () => {
+    inputRef.current.focus();
+    inputRef.current.select();
+  };
 
   const onKeyPress = e => {
     const value = inputRef.current.value;
     if (e.key === "Enter" && value) {
-      onSubmit(value);
+      submit(value);
       e.preventDefault();
     } else if (e.key === "Enter" && !value) {
       e.preventDefault();
@@ -34,15 +38,21 @@ function AutogrowInput({ onSubmit, onCancel, defaultValue }: Props) {
     const name = inputRef.current.value;
     if (!name) onCancel();
     else {
-      onSubmit(name);
+      submit(name);
     }
+  };
+
+  const submit = name => {
+    onSubmit(name);
+    inputRef.current.value = "";
   };
 
   return (
     <TextareaAutosize
-      css={cssInput}
-      placeholder="Enter title"
+      css={[cssInput, styles]}
+      placeholder={placeholder}
       ref={inputRef}
+      onClick={onClick}
       onBlur={onBlur}
       onKeyPress={onKeyPress}
       defaultValue={defaultValue}
@@ -52,10 +62,11 @@ function AutogrowInput({ onSubmit, onCancel, defaultValue }: Props) {
 
 export default AutogrowInput;
 
-const cssInput = css`
-  border: none;
-  color: #333;
-  font-size: 12px;
-  text-align: center;
-  resize: none;
-`;
+const cssInput = {
+  border: "none",
+  color: "#333",
+  fontSize: 12,
+  textAlign: "center",
+  resize: "none",
+  outline: "none",
+};

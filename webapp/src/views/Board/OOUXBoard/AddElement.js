@@ -2,12 +2,13 @@
 import React from "react";
 
 import styled from "@emotion/styled";
+import uuidv1 from "uuid/v1";
 import { css } from "@emotion/core";
 
 import AutogrowInput from "./AutogrowInput";
 import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
-import { ActionsContext } from ".";
+import { useOOUX } from "./OOUXContext";
 
 import type { ElementTypes } from "./Element";
 
@@ -28,14 +29,20 @@ function AddElement({ to }: Props) {
     type: DEFAULT_ELEMENT_TYPE,
   });
 
-  const { onAddElement } = React.useContext(ActionsContext);
+  const { dispatch } = useOOUX();
 
   const addNewElement = type => () => {
     setNewElement({ creating: true, type });
   };
 
   const submit = value => {
-    onAddElement(to, { name: value, type: newElement.type });
+    dispatch({
+      type: "addElement",
+      payload: {
+        columnId: to,
+        item: { id: uuidv1(), name: value, type: newElement.type },
+      },
+    });
     cancel();
   };
 
@@ -80,7 +87,7 @@ export default AddElement;
 const cssButtonsContainer = css`
   display: flex;
 
-  button:first-child {
+  button:first-of-type {
     margin-right: 7.5px;
   }
   button:last-child {
