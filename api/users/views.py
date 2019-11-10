@@ -43,7 +43,7 @@ def signin(request):
         response = {"email": user.email}
         return SuccessResponse(response)
     else:
-        return ErrorResponse(status=HTTPStatus.BAD_REQUEST)
+        return ErrorResponse(status=HTTPStatus.UNAUTHORIZED)
 
 
 @require_GET

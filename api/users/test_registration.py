@@ -22,7 +22,6 @@ class UserRegistration(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         response = response.json()
         self.assertEqual(User.objects.count(), 2)
-        self.assertEqual(response["data"]["username"], data["username"])
         self.assertEqual(response["data"]["email"], data["email"])
         self.assertFalse("password" in response["data"])
 
