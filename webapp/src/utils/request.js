@@ -41,6 +41,8 @@ function FetchRequest(url: string, config: Config = {}) {
       if (error.status === 401 || error.status === 403) {
         // $FlowFixMe
         dispatch({ type: "logout" });
+      } else if (error.status === 500) {
+        dispatch({ type: "showErrorPage" });
       }
       throw error;
     });

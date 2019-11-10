@@ -11,6 +11,7 @@ type User = {| email: string |};
 type State = {|
   user: User | null,
   loading: boolean,
+  showErrorPage: boolean,
 |};
 
 type Action = {|
@@ -34,6 +35,7 @@ const AuthContex = React.createContext<Context | void>();
 const initialState: State = {
   user: null,
   loading: true,
+  showErrorPage: false,
 };
 
 function reducer(state, action) {
@@ -44,9 +46,11 @@ function reducer(state, action) {
       email = action.payload.email;
       return { ...state, user: { email }, loading: false };
     case "isLoading":
-      return { ...state, loading: true };
+      return { ...state, loading: true, showErrorPage: false };
     case "logout":
       return { ...state, user: null, loading: false };
+    case "showErrorPage":
+      return { ...state, loading: false, showErrorPage: true };
     default:
       throw new Error("Invalid Auth action");
   }

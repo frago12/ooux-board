@@ -16,16 +16,18 @@ import { useAuth } from "context/AuthContext";
 
 function AppRouter() {
   const {
-    data: { user, loading },
+    data: { user, loading, showErrorPage },
     logout,
   } = useAuth();
 
   return (
     <>
-      <Navbar user = {user} logout={logout} />
+      <Navbar user={user} logout={logout} />
       <div css={cssMainContainer}>
         {loading ? (
           <div>Loading...</div>
+        ) : showErrorPage ? (
+          <div>Whoops! somehitng went wrong</div>
         ) : user ? (
           <AuthenticatedApp />
         ) : (
