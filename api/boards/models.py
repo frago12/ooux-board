@@ -5,14 +5,22 @@ from django.db import models
 from utils.models import BaseModel
 
 
+def serializeBoard(uuid, title, data=None):
+    board = dict(
+        id=uuid,
+        title=title,
+    )
+
+    if data is not None:
+        board.update({'data': data})
+
+    return board
+
+
 class Board(BaseModel):
     title = models.CharField(max_length=500)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     data = JSONField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 
     def serialize(self):
-        return dict(
-            id=self.uuid,
-            title=self.title,
-            data=self.data
-        )
+        return serializeBoard(self.uuid, self.title, self.data)
