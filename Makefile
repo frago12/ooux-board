@@ -24,7 +24,10 @@ dev-interactive:
 	docker-compose run --rm --service-ports --name api api
 
 shell-dev:
-	docker-compose run --rm --no-deps /bin/bash
+	docker-compose run --rm --no-deps api /bin/bash
+
+django-shell:
+	docker-compose run --rm api python manage.py shell
 
 test:
 	docker-compose run --rm api python manage.py test
