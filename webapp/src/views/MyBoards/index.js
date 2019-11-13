@@ -19,7 +19,7 @@ function MyBoards() {
         <div css={cssMyBoard}>
           <NewBoard />
           {boards.data.map(({ id, title }) => (
-            <BoardItem {...{ id, title }} />
+            <BoardItem key={id} {...{ id, title }} />
           ))}
         </div>
       )}
