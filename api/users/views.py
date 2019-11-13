@@ -55,6 +55,6 @@ def signout(request):
 @require_GET
 def me(request):
     if request.user.is_authenticated:
-        return SuccessResponse({'email': request.user.email})
+        return SuccessResponse({"email": request.user.email})
     else:
         return ErrorResponse(status=HTTPStatus.UNAUTHORIZED)

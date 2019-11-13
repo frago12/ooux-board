@@ -56,4 +56,3 @@ class Boards(TestBase):
     def test_unsigned_user_cannot_retrive_boards(self):
         response = self.fetch(self.boards_url)
         self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
-

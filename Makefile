@@ -30,7 +30,7 @@ django-shell:
 	docker-compose run --rm api python manage.py shell
 
 format:
-	docker-compose run --rm --no-deps api black .
+	docker-compose run --rm --no-deps api black --exclude "/migrations/" .
 
 test:
 	docker-compose run --rm api python manage.py test
