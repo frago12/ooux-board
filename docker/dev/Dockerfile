@@ -3,9 +3,10 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app/api
 
-RUN pip install pipenv
-COPY ./api/Pipfile ./api/Pipfile.lock /app/api/
-RUN pipenv install --system
+RUN pip install pip-tools
+COPY ./api/requirements.in /app/api/
+RUN pip-compile requirements.in
+RUN pip-sync
 
 COPY . /app/api
 

@@ -23,11 +23,14 @@ dev-up:
 dev-interactive:
 	docker-compose run --rm --service-ports --name api api
 
-shell-dev:
+dev-shell:
 	docker-compose run --rm --no-deps api /bin/bash
 
 django-shell:
 	docker-compose run --rm api python manage.py shell
+
+format:
+	docker-compose run --rm --no-deps api black .
 
 test:
 	docker-compose run --rm api python manage.py test
