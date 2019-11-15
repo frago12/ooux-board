@@ -25,6 +25,12 @@ class Boards(TestBase):
         response_data = response.json()
         self.assertEqual(response_data["data"]["title"], data["title"])
 
+    def test_user_cannot_create_board_with_empty_title(self):
+        data = {"title": ""}
+        self.login(self.user1)
+        response = self.fetch(self.boards_url, method="post", data=data)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
     def test_user_cannot_create_board_without_title(self):
         data = {}
         self.login(self.user1)
