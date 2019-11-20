@@ -18,6 +18,3 @@ class Board(BaseModel):
     title = models.CharField(max_length=500)
     data = JSONField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
-
-    def serialize(self):
-        return serializeBoard(self.uuid, self.title, self.data)
