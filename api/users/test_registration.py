@@ -12,8 +12,7 @@ class UserRegistration(TestBase):
 
     def test_create_user(self):
         data = {
-            "email": "user1@walla.io",
-            "username": "user1",
+            "email": "user1@example.com",
             "password": "pass",
             "password2": "pass",
         }
@@ -25,10 +24,9 @@ class UserRegistration(TestBase):
         self.assertEqual(response["data"]["email"], data["email"])
         self.assertFalse("password" in response["data"])
 
-    def test_create_user_with_short_password(self):
+    def test_cannot_create_user_with_short_password(self):
         data = {
             "email": "foobarbaz@example.com",
-            "username": "foobar",
             "password": "foo",
             "password2": "foo",
         }
@@ -36,21 +34,9 @@ class UserRegistration(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
 
-    def test_create_user_with_no_username(self):
+    def test_create_user_with_preexisting_email(self):
         data = {
-            "username": "",
-            "email": "foobarbaz@example.com",
-            "password": "foobar1",
-            "password2": "foobar",
-        }
-        response = self.fetch(self.create_url, "post", data)
-        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        self.assertEqual(User.objects.count(), 1)
-
-    def test_create_user_with_preexisting_username(self):
-        data = {
-            "username": "testuser",
-            "email": "user@example.com",
+            "email": "test@example.com",
             "password": "testuser",
             "password2": "testuser",
         }
@@ -58,24 +44,14 @@ class UserRegistration(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
 
-    def test_create_user_with_preexisting_email(self):
-        data = {
-            "username": "testuser2",
-            "email": "test@example.com",
-            "password": "testuser",
-        }
-        response = self.fetch(self.create_url, "post", data)
-        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        self.assertEqual(User.objects.count(), 1)
-
-    def test_create_user_with_invalid_email(self):
-        data = {"username": "foobarbaz", "email": "testing", "passsword": "foobarbaz"}
+    def test_cannot_create_user_with_invalid_email(self):
+        data = {"email": "testing", "passsword": "foobarbaz", "passsword2": "foobarbaz"}
         response = self.fetch(self.create_url, "post", data)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
 
     def test_create_user_with_no_email(self):
-        data = {"username": "foobar", "email": "", "password": "foobarbaz"}
+        data = {"email": "", "password": "foobarbaz"}
 
         response = self.fetch(self.create_url, "post", data)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)

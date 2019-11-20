@@ -24,3 +24,13 @@ class UserLogin(TestBase):
         data = {"email": "testuser@example.com", "password": "incorrect"}
         response = self.fetch(self.login_url, "post", data)
         self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
+
+    def test_user_cannot_login_without_email(self):
+        data = {"password": "incorrect"}
+        response = self.fetch(self.login_url, "post", data)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_user_cannot_login_without_password(self):
+        data = {"email": "testuser@example.com"}
+        response = self.fetch(self.login_url, "post", data)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)

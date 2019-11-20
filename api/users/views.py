@@ -1,43 +1,56 @@
 import json
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from http import HTTPStatus
+from schema import Schema, And
 
-from users.forms import UserForm
+from utils.decorators import function_schema_validation
 from utils.response import SuccessResponse, ErrorResponse
 
 
+new_user_schema = Schema(
+    {
+        "email": And(str, lambda s: len(s) >= 3),
+        "password": And(str, lambda s: len(s) >= 4),
+        "password2": And(str, lambda s: len(s) >= 4),
+    }
+)
+
+
+@function_schema_validation(new_user_schema)
 @require_POST
 @csrf_exempt
 def signup(request):
-    user_info = json.loads(request.body)
-    form = UserForm(user_info)
-    if form.is_valid():
-        user = form.cleaned_data
-        new_user = form.save(commit=False)
-        new_user.set_password(user.get("password"))
-        new_user.save()
-        user = authenticate(username=user.get("email"), password=user.get("password"))
-        if user is not None:
-            response = {"email": new_user.email}
-            return SuccessResponse(response, status=HTTPStatus.CREATED)
-        else:
-            return ErrorResponse(status=HTTPStatus.BAD_REQUEST)
+    user_info = request.json_data
+
+    if User.objects.filter(email=user_info["email"]).exists():
+        return ErrorResponse(status=HTTPStatus.BAD_REQUEST)
+
+    new_user = User()
+    new_user.email = user_info["email"]
+    new_user.username = user_info["email"]
+    new_user.set_password(user_info["password"])
+    new_user.save()
+    user = authenticate(username=new_user.email, password=user_info["password"])
+    if user is not None:
+        response = {"email": new_user.email}
+        return SuccessResponse(response, status=HTTPStatus.CREATED)
     else:
-        return ErrorResponse(
-            errors=form.errors.as_json(), status=HTTPStatus.BAD_REQUEST
-        )
+        return ErrorResponse(status=HTTPStatus.BAD_REQUEST)
 
 
+user_schema = Schema({"email": And(str, len), "password": And(str, len)})
+
+
+@function_schema_validation(user_schema)
 @require_POST
 @csrf_exempt
 def signin(request):
-    user_info = json.loads(request.body)
-    email = user_info.get("email", None)
-    password = user_info.get("password", None)
-    user = authenticate(username=email, password=password)
+    user_info = request.json_data
+    user = authenticate(username=user_info["email"], password=user_info["password"])
     if user is not None:
         login(request, user)
         response = {"email": user.email}
