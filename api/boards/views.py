@@ -1,33 +1,21 @@
 from django.views import View
-from schema import Schema, Optional, And
+from schema import Schema, Optional, And, Or
+from http import HTTPStatus
 
 from boards.models import Board, serializeBoard
-from utils.response import SuccessResponse
+from boards.decorators import validate_existing_board
+from utils.response import SuccessResponse, ErrorResponse
 from utils.decorators import schema_validation
 
-
-board_schema = Schema(
-    {
-        "title": And(str, len),
-        Optional("data"): [
-            {
-                "id": str,
-                "systemObject": str,
-                "elements": [{"id": str, "type": str, "name": str}],
-                "ctas": [{"id": str, "type": str, "name": str}],
-            }
-        ],
-    }
-)
+new_board_schema = Schema({"title": And(str, len)})
 
 
 class BoardListView(View):
-    @schema_validation(board_schema)
+    @schema_validation(new_board_schema)
     def post(self, request, *args, **kwargs):
         board_data = request.json_data
-        data = {} if "data" not in board_data else board_data["data"]
         board = Board.objects.create(
-            title=board_data["title"], user=request.user, data=data
+            title=board_data["title"], user=request.user, data={}
         )
         return SuccessResponse(data=serializeBoard(board.uuid, board.title, board.data))
 
@@ -35,3 +23,54 @@ class BoardListView(View):
         boards = Board.objects.filter(user__id=request.user.id).values("uuid", "title")
         data = [serializeBoard(i["uuid"], i["title"]) for i in boards]
         return SuccessResponse(data=data)
+
+
+board_schema = Schema(
+    {
+        "title": And(str, len),
+        Optional("data"): Or(
+            [
+                {
+                    "id": str,
+                    "systemObject": str,
+                    "elements": [
+                        {
+                            "id": str,
+                            "type": Or("object", "coredata", "metadata"),
+                            "name": str,
+                        }
+                    ],
+                    "ctas": [{"id": str, "type": "cta", "name": str}],
+                }
+            ],
+            {},
+        ),
+    }
+)
+
+
+class BoardView(View):
+    @validate_existing_board
+    def get(self, request, board_id):
+        return SuccessResponse(
+            data=serializeBoard(
+                request.board.uuid, request.board.title, request.board.data
+            )
+        )
+
+    @validate_existing_board
+    @schema_validation(board_schema)
+    def put(self, request, board_id):
+        board_data = request.json_data
+        board = request.board
+        board.title = board_data.get("title")
+        board.data = (
+            board_data.get("data", {})
+            if "data" in board_data.keys()
+            else board.data
+        )
+        board.save()
+
+        return SuccessResponse(
+            data=serializeBoard(board.uuid, board.title, board.data)
+        )
