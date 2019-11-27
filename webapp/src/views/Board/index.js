@@ -10,10 +10,14 @@ import { getBoard } from "utils/apiClient/boards";
 
 type Props = {|
   boardId?: string,
+  isNew?: Boolean,
 |};
 
-function Board({ boardId }: Props) {
-  const { data: board } = useSWR("getBoard", boardId ? getBoard : null);
+function Board({ boardId, isNew = false }: Props) {
+  const { data: board } = useSWR(
+    "getBoard",
+    boardId ? getBoard(boardId) : null,
+  );
 
   return (
     <>
@@ -21,7 +25,7 @@ function Board({ boardId }: Props) {
         <div>Loading...</div>
       ) : (
         <div css={cssBoard}>
-          <Form title={board && board.data.title} isNew={!boardId} />
+          <Form title={board && board.data.title} isNew={isNew} />
           {boardId && (
             <OOUXBoard
               initialData={[]}

@@ -12,7 +12,8 @@ export const createBoard = title =>
     }),
   );
 
-export const getBoard = () => id => {};
+export const getBoard = id => () =>
+  withErrorHandling(() => request(`/api/boards/${id}`));
 
 export const updateBoard = () => (id, title, data) => {};
 

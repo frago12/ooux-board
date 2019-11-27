@@ -10,7 +10,7 @@ function AuthenticatedApp() {
   return (
     <Router>
       <MyBoards path="/" />
-      <Board path="/b/new" />
+      <Board path="/b/new" isNew={true} />
       <Board path="/b/:boardId" />
     </Router>
   );
