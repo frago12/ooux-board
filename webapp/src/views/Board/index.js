@@ -6,7 +6,6 @@ import { css } from "@emotion/core";
 
 import Form from "./BoardForm";
 import OOUXBoard from "./OOUXBoard";
-import { getBoard } from "utils/apiClient/boards";
 
 type Props = {|
   boardId?: string,
@@ -14,30 +13,23 @@ type Props = {|
 |};
 
 function Board({ boardId, isNew = false }: Props) {
-  const { data: board } = useSWR(
-    "getBoard",
-    boardId ? getBoard(boardId) : null,
-  );
+  const { data: board } = useSWR(boardId ? `/api/boards/${boardId}` : null, {
+    suspense: true,
+  });
 
   return (
-    <>
-      {boardId && !board ? (
-        <div>Loading...</div>
-      ) : (
-        <div css={cssBoard}>
-          <Form title={board && board.data.title} isNew={isNew} />
-          {boardId && (
-            <OOUXBoard
-              initialData={[]}
-              onAddElement={() => {}}
-              onRemoveElement={() => {}}
-              onEditElement={() => {}}
-              onReorderElements={() => {}}
-            />
-          )}
-        </div>
+    <div css={cssBoard}>
+      <Form title={board.data.title} isNew={isNew} />
+      {boardId && (
+        <OOUXBoard
+          initialData={[]}
+          onAddElement={() => {}}
+          onRemoveElement={() => {}}
+          onEditElement={() => {}}
+          onReorderElements={() => {}}
+        />
       )}
-    </>
+    </div>
   );
 }
 

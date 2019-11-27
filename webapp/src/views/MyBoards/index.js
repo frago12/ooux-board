@@ -6,24 +6,17 @@ import { css } from "@emotion/core";
 
 import NewBoard from "./NewBoard";
 import BoardItem from "./BoardItem";
-import { getBoards } from "utils/apiClient/boards";
 
 function MyBoards() {
-  const { data: boards } = useSWR("getBoards", getBoards);
+  const { data: boards } = useSWR("/api/boards", { suspense: true });
 
   return (
-    <>
-      {!boards ? (
-        <div>Loading...</div>
-      ) : (
-        <div css={cssMyBoard}>
-          <NewBoard />
-          {boards.data.map(({ id, title }) => (
-            <BoardItem key={id} {...{ id, title }} />
-          ))}
-        </div>
-      )}
-    </>
+    <div css={cssMyBoard}>
+      <NewBoard />
+      {boards.data.map(({ id, title }) => (
+        <BoardItem key={id} {...{ id, title }} />
+      ))}
+    </div>
   );
 }
 

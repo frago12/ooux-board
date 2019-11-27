@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import React, { Suspense } from "react";
 
 import { Router } from "@reach/router";
 
@@ -8,11 +8,13 @@ import Board from "views/Board";
 
 function AuthenticatedApp() {
   return (
-    <Router>
-      <MyBoards path="/" />
-      <Board path="/b/new" isNew={true} />
-      <Board path="/b/:boardId" />
-    </Router>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Router>
+        <MyBoards path="/" />
+        <Board path="/b/new" isNew={true} />
+        <Board path="/b/:boardId" />
+      </Router>
+    </Suspense>
   );
 }
 

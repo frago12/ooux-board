@@ -39,6 +39,7 @@ function BoardForm({ isNew, title }: Props) {
         css={cssInput}
         placeholder="Type a name for the board"
         ref={inputRef}
+        defaultValue={title}
       />
     </form>
   );

@@ -1,8 +1,8 @@
 // @flow
 import React from "react";
 
+import { SWRConfig } from "swr";
 import { css } from "@emotion/core";
-
 import {
   ToastsContainer,
   ToastsContainerPosition,
@@ -12,16 +12,23 @@ import {
 import AuthenticatedApp from "./AuthenticatedApp";
 import UnauthenticatedApp from "./UnauthenticatedApp";
 import Navbar from "components/Navbar";
+import request from "utils/request";
+import { withErrorHandling } from "utils/decorators";
 import { useAuth } from "context/AuthContext";
 
-function AppRouter() {
+function App() {
   const {
     data: { user, loading, showErrorPage },
     logout,
   } = useAuth();
 
   return (
-    <>
+    <SWRConfig
+      value={{
+        refreshInterval: 0,
+        fetcher: (...args) => withErrorHandling(() => request(...args)),
+      }}
+    >
       <Navbar user={user} logout={logout} />
       <div css={cssMainContainer}>
         {loading ? (
@@ -38,11 +45,11 @@ function AppRouter() {
         store={ToastsStore}
         position={ToastsContainerPosition.TOP_RIGHT}
       />
-    </>
+    </SWRConfig>
   );
 }
 
-export default AppRouter;
+export default App;
 
 const cssMainContainer = css`
   padding: 0 40px;
