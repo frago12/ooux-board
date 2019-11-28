@@ -2,7 +2,9 @@
 import request from "utils/request";
 import { withErrorHandling } from "utils/decorators";
 
-export const createBoard = title =>
+import type { BoardData } from "components/OOUXBoard/types";
+
+export const createBoard = (title: string) =>
   withErrorHandling(() =>
     request("/api/boards/", {
       method: "post",
@@ -10,6 +12,10 @@ export const createBoard = title =>
     }),
   );
 
-export const updateBoard = () => (id, title, data) => {};
+export const updateBoard = (
+  id: string,
+  title: string,
+  data?: BoardData = null,
+) => {};
 
-export const deleteeBoard = () => id => {};
+export const deleteeBoard = () => (id: string) => {};

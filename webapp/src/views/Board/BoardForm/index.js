@@ -7,12 +7,12 @@ import { createBoard, updateBoard } from "utils/apiClient/boards";
 import { textColors } from "styles/variables";
 
 type Props = {|
-  isNew: boolean,
-  title: string,
+  boardId?: string,
+  boardName?: string,
 |};
 
-function BoardForm({ isNew, title }: Props) {
-  const inputRef = React.createRef();
+function BoardForm({ boardId = null, boardName }: Props) {
+  const inputRef: { current: any } = React.createRef();
 
   React.useEffect(() => {
     inputRef.current.focus();
@@ -21,10 +21,9 @@ function BoardForm({ isNew, title }: Props) {
 
   const onSubmit = async e => {
     e.preventDefault();
-    const boardName = inputRef.current.value;
-    if (!boardName) return;
-
-    isNew ? onCreateBoard(boardName) : updateBoard({ name: boardName });
+    const name = inputRef.current.value;
+    if (!name) return;
+    boardId === null ? onCreateBoard(name) : updateBoard(boardId, name);
   };
 
   const onCreateBoard = async boardName => {
@@ -39,7 +38,7 @@ function BoardForm({ isNew, title }: Props) {
         css={cssInput}
         placeholder="Type a name for the board"
         ref={inputRef}
-        defaultValue={title}
+        defaultValue={boardName}
       />
     </form>
   );

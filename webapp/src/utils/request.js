@@ -1,5 +1,5 @@
 // @flow
-type Dispatch = () => void;
+type Dispatch = (options: { type: string }) => void;
 
 let dispatch: ?Dispatch = null;
 
@@ -42,6 +42,7 @@ function FetchRequest(url: string, config: Config = {}) {
         // $FlowFixMe
         dispatch({ type: "logout" });
       } else if (error.status === 500) {
+        // $FlowFixMe
         dispatch({ type: "showErrorPage" });
       }
       throw error;

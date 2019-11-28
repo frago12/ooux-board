@@ -5,29 +5,35 @@ import useSWR from "swr";
 import { css } from "@emotion/core";
 
 import Form from "./BoardForm";
-import OOUXBoard from "./OOUXBoard";
+import OOUXBoard from "../../components/OOUXBoard";
 
 type Props = {|
   boardId?: string,
-  isNew?: Boolean,
 |};
 
-function Board({ boardId, isNew = false }: Props) {
-  const { data: board } = useSWR(boardId ? `/api/boards/${boardId}` : null, {
-    suspense: true,
-  });
+function Board({ boardId = null }: Props) {
+  const { data: board } = useSWR(
+    boardId !== null ? `/api/boards/${boardId}` : null,
+    {
+      suspense: true,
+    },
+  );
 
   return (
     <div css={cssBoard}>
-      <Form title={board.data.title} isNew={isNew} />
-      {boardId && (
-        <OOUXBoard
-          initialData={[]}
-          onAddElement={() => {}}
-          onRemoveElement={() => {}}
-          onEditElement={() => {}}
-          onReorderElements={() => {}}
-        />
+      {board ? (
+        <>
+          <Form boardId={boardId} boardName={board.data.title} />
+          <OOUXBoard
+            initialData={[]}
+            onAddElement={() => {}}
+            onRemoveElement={() => {}}
+            onEditElement={() => {}}
+            onReorderElements={() => {}}
+          />
+        </>
+      ) : (
+        <Form />
       )}
     </div>
   );

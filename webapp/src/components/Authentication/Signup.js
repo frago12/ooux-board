@@ -18,13 +18,13 @@ import {
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string()
-    .min("3")
+    .min(3)
     .required("Required"),
   password: Yup.string()
-    .min("4", "Password should have at least 4 character")
+    .min(4, "Password should have at least 4 character")
     .required("Required"),
   repeat: Yup.string()
-    .min("4", "Password should have at least 4 character")
+    .min(4, "Password should have at least 4 character")
     .required("Required"),
 });
 

@@ -11,7 +11,9 @@ function AuthenticatedApp() {
     <Suspense fallback={<div>Loading...</div>}>
       <Router>
         <MyBoards path="/" />
-        <Board path="/b/new" isNew={true} />
+        {/* $FlowFixMe */}
+        <Board path="/b/new" />
+        {/* $FlowFixMe */}
         <Board path="/b/:boardId" />
       </Router>
     </Suspense>
