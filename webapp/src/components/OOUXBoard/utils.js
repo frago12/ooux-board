@@ -1,5 +1,5 @@
 // @flow
-import type { ElementTypes } from "./Element";
+import type { ElementTypes } from "./types";
 
 const colors = {
   blue: "#5BAFF8",

@@ -3,19 +3,44 @@ import * as React from "react";
 
 import produce from "immer";
 
-const OOUXContext = React.createContext();
+import type { BoardData } from "./types";
 
 type Props = {|
   children: React.Node,
+  initialData: BoardData,
 |};
+
+type State = {|
+  data: BoardData,
+|};
+
+type Action = {|
+  type: string,
+  payload: {
+    [any]: any,
+  },
+|};
+
+type Context = {|
+  state: State,
+  dispatch: (action: Action) => void,
+|};
+
+const OOUXContext = React.createContext<Context | void>();
 
 const initialState = {
   data: [],
 };
 
-export function OOUXProvider(props: Props) {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
-  return <OOUXContext.Provider value={{ state, dispatch }} {...props} />;
+export function OOUXProvider({ children, initialData }: Props) {
+  const [state, dispatch] = React.useReducer<State, Action, State>(
+    reducer,
+    initialState,
+    () => ({ data: initialData }),
+  );
+  return (
+    <OOUXContext.Provider value={{ state, dispatch }} children={children} />
+  );
 }
 
 export function useOOUX() {
@@ -39,7 +64,7 @@ function reducer(state, action) {
         const { id, name } = action.payload;
         draft.data.push({
           id,
-          systemObject: name,
+          name: name,
           elements: [],
           ctas: [],
         });
@@ -76,41 +101,3 @@ function reducer(state, action) {
     }
   });
 }
-
-// const initialState = {
-//   isLoading: false,
-//   data: [
-//     {
-//       id: "c1",
-//       systemObject: "OOUX Board",
-//       elements: [{ id: "1", type: "object", name: "Lists" }],
-//       ctas: [{ id: "1", type: "cta", name: "Add list" }],
-//     },
-//     {
-//       id: "c2",
-//       systemObject: "List",
-//       elements: [
-//         { id: "1", type: "coredata", name: "Name" },
-//         { id: "2", type: "object", name: "Elements" },
-//         { id: "3", type: "object", name: "CTAs" },
-//       ],
-//       ctas: [
-//         { id: "1", type: "cta", name: "Add element" },
-//         { id: "2", type: "cta", name: "Add cta" },
-//         { id: "3", type: "cta", name: "Remove" },
-//       ],
-//     },
-//     {
-//       id: "c3",
-//       systemObject: "Element / CTA",
-//       elements: [
-//         { id: "1", type: "coredata", name: "Name" },
-//         { id: "2", type: "coredata", name: "Type" },
-//       ],
-//       ctas: [
-//         { id: "1", type: "cta", name: "Remove" },
-//         { id: "2", type: "cta", name: "Edit name" },
-//       ],
-//     },
-//   ],
-// };

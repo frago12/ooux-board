@@ -8,10 +8,16 @@ type Props = {|
   placeholder?: string,
   onCancel: () => void,
   onSubmit: (value: string) => void,
-  styles: { [any]: any },
+  styles?: { [any]: any },
 |};
 
-function AutogrowInput({ styles, onSubmit, onCancel, defaultValue, placeholder = 'Entrer title' }: Props) {
+function AutogrowInput({
+  styles,
+  onSubmit,
+  onCancel,
+  defaultValue,
+  placeholder = "Entrer title",
+}: Props) {
   const inputRef: { current: any } = React.useMemo(() => React.createRef(), []);
 
   React.useEffect(() => {

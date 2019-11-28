@@ -11,7 +11,7 @@ import { useOOUX } from "./OOUXContext";
 import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
 
-export type ElementTypes = "object" | "coredata" | "metadata" | "cta";
+import type { ElementTypes } from "./types";
 
 type Props = {|
   index: number,

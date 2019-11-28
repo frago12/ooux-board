@@ -8,17 +8,11 @@ import { css } from "@emotion/core";
 import Element from "./Element";
 import { useOOUX } from "./OOUXContext";
 
-import type { ElementTypes } from "./Element";
-
-export type ElementType = {|
-  id: string,
-  name: string,
-  type: ElementTypes,
-|};
+import type { Element as ElementType, CTA as CTAType } from "./types";
 
 type Props = {|
   columnId: string,
-  items: ElementType[],
+  items: ElementType[] | CTAType[],
 |};
 
 function List({ columnId, items }: Props) {

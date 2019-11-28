@@ -10,7 +10,7 @@ import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
 import { useOOUX } from "./OOUXContext";
 
-import type { ElementTypes } from "./Element";
+import type { ElementTypes } from "./types";
 
 export type NewElement = {|
   name: string,
