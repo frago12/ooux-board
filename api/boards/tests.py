@@ -13,7 +13,7 @@ class Boards(TestBase):
 
         self.board1 = Board.objects.create(
             title="board 1",
-            data={"id": "1", "systemObject": "Test", "elements": [], "ctas": []},
+            data={"id": "1", "name": "Test", "elements": [], "ctas": []},
             user=self.user1,
         )
         Board.objects.create(title="board 2", data={}, user=self.user1)
@@ -132,9 +132,7 @@ class Boards(TestBase):
     def test_user_can_update_board_data(self):
         data = {
             "title": "title",
-            "data": [
-                {"id": "abc123", "systemObject": "Test", "elements": [], "ctas": []}
-            ],
+            "data": [{"id": "abc123", "name": "Test", "elements": [], "ctas": []}],
         }
         url = self.board_url(self.board1.uuid)
         self.login(self.user1)
@@ -150,7 +148,7 @@ class Boards(TestBase):
             "data": [
                 {
                     "id": "abc123",
-                    "systemObject": "Test",
+                    "name": "Test",
                     "elements": [
                         {"id": "1", "type": "object", "name": "my object"},
                         {"id": "2", "type": "coredata", "name": "my coredata"},
@@ -174,7 +172,7 @@ class Boards(TestBase):
             "data": [
                 {
                     "id": "abc123",
-                    "systemObject": "Test",
+                    "name": "Test",
                     "elements": [
                         {"id": "1", "type": "object", "name": "my object"},
                         {"id": "2", "type": "coredata", "name": "my coredata"},
@@ -198,9 +196,9 @@ class Boards(TestBase):
             "data": [
                 {
                     "id": "abc123",
-                    "systemObject": "Test",
+                    "name": "Test",
                     "elements": [],
-                    "ctas": [{"id": "1", "type": "cta", "name": "my cta"},],
+                    "ctas": [{"id": "1", "type": "cta", "name": "my cta"}],
                 }
             ],
         }
@@ -218,9 +216,9 @@ class Boards(TestBase):
             "data": [
                 {
                     "id": "abc123",
-                    "systemObject": "Test",
+                    "name": "Test",
                     "elements": [],
-                    "ctas": [{"id": "1", "type": "badcta", "name": "my cta"},],
+                    "ctas": [{"id": "1", "type": "badcta", "name": "my cta"}],
                 }
             ],
         }

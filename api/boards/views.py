@@ -1,10 +1,9 @@
 from django.views import View
 from schema import Schema, Optional, And, Or
-from http import HTTPStatus
 
 from boards.models import Board, serializeBoard
 from boards.decorators import validate_existing_board
-from utils.response import SuccessResponse, ErrorResponse
+from utils.response import SuccessResponse
 from utils.decorators import schema_validation
 
 new_board_schema = Schema({"title": And(str, len)})
@@ -32,7 +31,7 @@ board_schema = Schema(
             [
                 {
                     "id": str,
-                    "systemObject": str,
+                    "name": str,
                     "elements": [
                         {
                             "id": str,
@@ -65,12 +64,8 @@ class BoardView(View):
         board = request.board
         board.title = board_data.get("title")
         board.data = (
-            board_data.get("data", {})
-            if "data" in board_data.keys()
-            else board.data
+            board_data.get("data", {}) if "data" in board_data.keys() else board.data
         )
         board.save()
 
-        return SuccessResponse(
-            data=serializeBoard(board.uuid, board.title, board.data)
-        )
+        return SuccessResponse(data=serializeBoard(board.uuid, board.title, board.data))
