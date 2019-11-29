@@ -4,30 +4,18 @@ import React from "react";
 import useSWR from "swr";
 import { css } from "@emotion/core";
 
-import Form from "./BoardForm";
+import Form from "../../components/BoardForm";
 import OOUXBoard from "../../components/OOUXBoard";
 import { updateBoard } from "utils/apiClient/boards";
 
 type Props = {|
-  boardId?: string,
+  boardId: string,
 |};
 
-const initialData = [
-  {
-    id: "1",
-    name: "chef",
-    elements: [],
-    ctas: [],
-  },
-];
-
-function Board({ boardId = null }: Props) {
-  const { data: board } = useSWR(
-    boardId !== null ? `/api/boards/${boardId}` : null,
-    {
-      suspense: true,
-    },
-  );
+function Board({ boardId }: Props) {
+  const { data: board } = useSWR(`/api/boards/${boardId}`, {
+    suspense: true,
+  });
 
   const onChange = React.useCallback(
     boardData => {
@@ -39,14 +27,8 @@ function Board({ boardId = null }: Props) {
 
   return (
     <div css={cssBoard}>
-      {board ? (
-        <>
-          <Form boardId={boardId} boardName={board.data.title} />
-          <OOUXBoard initialData={initialData} onChange={onChange} />
-        </>
-      ) : (
-        <Form />
-      )}
+      <Form boardId={boardId} boardName={board.data.title} />
+      <OOUXBoard initialData={[]} onChange={onChange} />
     </div>
   );
 }
