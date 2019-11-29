@@ -18,3 +18,9 @@ class Board(BaseModel):
     title = models.CharField(max_length=500)
     data = JSONField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
+
+    class Meta:
+        ordering = ("created",)
+
+    def __str__(self):
+        return self.title
