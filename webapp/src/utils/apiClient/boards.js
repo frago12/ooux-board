@@ -12,10 +12,12 @@ export const createBoard = (title: string) =>
     }),
   );
 
-export const updateBoard = (
-  id: string,
-  title: string,
-  data?: BoardData = null,
-) => {};
+export const updateBoard = (id: string, title: string, data?: BoardData) =>
+  withErrorHandling(() =>
+    request(`/api/boards/${id}`, {
+      method: "put",
+      body: { title, data },
+    }),
+  );
 
 export const deleteeBoard = () => (id: string) => {};

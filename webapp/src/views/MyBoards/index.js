@@ -8,7 +8,7 @@ import NewBoard from "./NewBoard";
 import BoardItem from "./BoardItem";
 
 function MyBoards() {
-  const { data: boards } = useSWR("/api/boards", { suspense: true });
+  const { data: boards } = useSWR("/api/boards");
 
   return (
     <div css={cssMyBoard}>

@@ -27,6 +27,8 @@ function App() {
       value={{
         refreshInterval: 0,
         fetcher: (...args) => withErrorHandling(() => request(...args)),
+        revalidateOnFocus: false,
+        suspense: true,
       }}
     >
       <Navbar user={user} logout={logout} />

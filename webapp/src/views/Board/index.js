@@ -13,9 +13,7 @@ type Props = {|
 |};
 
 function Board({ boardId }: Props) {
-  const { data: board } = useSWR(`/api/boards/${boardId}`, {
-    suspense: true,
-  });
+  const { data: board } = useSWR(`/api/boards/${boardId}`);
 
   const onChange = React.useCallback(
     boardData => {
@@ -28,7 +26,7 @@ function Board({ boardId }: Props) {
   return (
     <div css={cssBoard}>
       <Form boardId={boardId} boardName={board.data.title} />
-      <OOUXBoard initialData={[]} onChange={onChange} />
+      <OOUXBoard initialData={board.data.data} onChange={onChange} />
     </div>
   );
 }
