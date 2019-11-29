@@ -14,7 +14,7 @@ class BoardListView(View):
     def post(self, request, *args, **kwargs):
         board_data = request.json_data
         board = Board.objects.create(
-            title=board_data["title"], user=request.user, data={}
+            title=board_data["title"], user=request.user, data=[]
         )
         return SuccessResponse(data=serializeBoard(board.uuid, board.title, board.data))
 
@@ -27,23 +27,20 @@ class BoardListView(View):
 board_schema = Schema(
     {
         "title": And(str, len),
-        Optional("data"): Or(
-            [
-                {
-                    "id": str,
-                    "name": str,
-                    "elements": [
-                        {
-                            "id": str,
-                            "type": Or("object", "coredata", "metadata"),
-                            "name": str,
-                        }
-                    ],
-                    "ctas": [{"id": str, "type": "cta", "name": str}],
-                }
-            ],
-            {},
-        ),
+        Optional("data"): [
+            {
+                "id": str,
+                "name": str,
+                "elements": [
+                    {
+                        "id": str,
+                        "type": Or("object", "coredata", "metadata"),
+                        "name": str,
+                    }
+                ],
+                "ctas": [{"id": str, "type": "cta", "name": str}],
+            }
+        ],
     }
 )
 

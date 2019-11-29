@@ -112,7 +112,7 @@ class Boards(TestBase):
     #####
 
     def test_user_can_update_board_title(self):
-        data = {"title": "the new title", "data": {}}
+        data = {"title": "the new title", "data": []}
         url = self.board_url(self.board1.uuid)
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
@@ -121,7 +121,7 @@ class Boards(TestBase):
         self.assertEqual(response_data["title"], data["title"])
 
     def test_board_cannot_be_updated_if_title_is_empty(self):
-        data = {"title": "", "data": {}}
+        data = {"title": "", "data": []}
         url = self.board_url(self.board1.uuid)
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
@@ -249,7 +249,7 @@ class Boards(TestBase):
         self.assertEqual(response_data["error"], True)
 
     def test_cannot_update_non_extisting_board(self):
-        data = {"title": "title", "data": {}}
+        data = {"title": "title", "data": []}
         url = self.board_url("123")
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
@@ -258,7 +258,7 @@ class Boards(TestBase):
         self.assertEqual(response_data["error"], True)
 
     def test_unsigned_user_cannot_update_board(self):
-        data = {"title": "title", "data": {}}
+        data = {"title": "title", "data": []}
         url = self.board_url(self.board1.uuid)
         response = self.fetch(url, method="put", data=data)
         self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
