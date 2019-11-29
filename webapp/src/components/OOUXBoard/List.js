@@ -13,17 +13,20 @@ import type { Element as ElementType, CTA as CTAType } from "./types";
 type Props = {|
   columnId: string,
   items: ElementType[] | CTAType[],
+  isCtas?: boolean,
 |};
 
-function List({ columnId, items }: Props) {
+function List({ columnId, items, isCtas = false }: Props) {
   const { dispatch } = useOOUX();
 
   const onDragEnd = result => {
     // dropped outside the list
     if (!result.destination) return;
 
+    const eventType = isCtas ? "reorderCtas" : "reorderElements";
+
     dispatch({
-      type: "reorderElements",
+      type: eventType,
       payload: {
         columnId,
         startIndex: result.source.index,

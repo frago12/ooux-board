@@ -69,6 +69,10 @@ function reducer(state, action) {
           ctas: [],
         });
         break;
+      case "addCTA":
+        columnIndex = state.data.findIndex(c => c.id === columnId);
+        draft.data[columnIndex].ctas.unshift({ ...action.payload.item });
+        break;
       case "addElement":
         columnIndex = state.data.findIndex(c => c.id === columnId);
         draft.data[columnIndex].elements.push({ ...action.payload.item });
@@ -89,12 +93,20 @@ function reducer(state, action) {
         );
         draft.data[columnIndex].elements.splice(elementIndex, 1);
         break;
-      case "reorderElements":
-        const { startIndex, endIndex } = action.payload;
+      case "reorderCtas":
+        const { startIndex: startCta, endIndex: endCta } = action.payload;
         columnIndex = state.data.findIndex(c => c.id === columnId);
-        const result = draft.data[columnIndex].elements;
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
+        const [removedCta] = draft.data[columnIndex].ctas.splice(startCta, 1);
+        draft.data[columnIndex].ctas.splice(endCta, 0, removedCta);
+        break;
+      case "reorderElements":
+        const { startIndex: startElem, endIndex: endElem } = action.payload;
+        columnIndex = state.data.findIndex(c => c.id === columnId);
+        const [removedElem] = draft.data[columnIndex].elements.splice(
+          startElem,
+          1,
+        );
+        draft.data[columnIndex].elements.splice(endElem, 0, removedElem);
         break;
       default:
         throw new Error("Invalid board action");

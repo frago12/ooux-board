@@ -4,6 +4,7 @@ import * as React from "react";
 import { css } from "@emotion/core";
 
 import AddMainObject from "./AddMainObject";
+import AddCTA from "./AddCTA";
 import AddElement from "./AddElement";
 import List from "./List";
 import MainObject from "./MainObject";
@@ -42,13 +43,17 @@ function Board({ onChange }: Props) {
             maxCtas={maxCtas}
             columnCtasCount={column.ctas.length}
           />
-          <List columnId={column.id} items={column.ctas} />
+          <AddCTA to={column.id} />
+          <List columnId={column.id} items={column.ctas} isCtas />
           <MainObject name={column.name} />
           <List columnId={column.id} items={column.elements} />
           <AddElement to={column.id} />
         </div>
       ))}
-      <AddMainObject />
+      <div>
+        <TopWhiteSpace maxCtas={maxCtas} columnCtasCount={0} />
+        <AddMainObject />
+      </div>
     </div>
   );
 }
