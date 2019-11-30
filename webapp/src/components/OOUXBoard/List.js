@@ -23,14 +23,13 @@ function List({ columnId, items, isCtas = false }: Props) {
     // dropped outside the list
     if (!result.destination) return;
 
-    const eventType = isCtas ? "reorderCtas" : "reorderElements";
-
     dispatch({
-      type: eventType,
+      type: "reorderItems",
       payload: {
         columnId,
         startIndex: result.source.index,
         endIndex: result.destination.index,
+        group: isCtas ? "ctas" : "elements",
       },
     });
   };
