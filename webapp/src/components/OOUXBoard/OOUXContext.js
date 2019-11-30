@@ -89,6 +89,7 @@ function reducer(state, action) {
         break;
       case "removeItem":
         const { itemId } = action.payload;
+        group = action.payload.group;
         columnIndex = state.data.findIndex(c => c.id === columnId);
         elementIndex = draft.data[columnIndex][group].findIndex(
           e => e.id === itemId,
