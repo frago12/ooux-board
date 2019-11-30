@@ -13,11 +13,11 @@ type Props = {|
   styles?: string,
 |};
 
-function AddMainObject({ styles }: Props) {
+function AddSystemObject({ styles }: Props) {
   const { dispatch } = useOOUX();
 
   const submit = value => {
-    dispatch({ type: "addMainObject", payload: { id: uuid(), name: value } });
+    dispatch({ type: "addSystemObject", payload: { id: uuid(), name: value } });
   };
 
   return (
@@ -38,7 +38,7 @@ function AddMainObject({ styles }: Props) {
   );
 }
 
-export default AddMainObject;
+export default AddSystemObject;
 
 const cssAddObject = {
   border: "2px dashed #ccc",

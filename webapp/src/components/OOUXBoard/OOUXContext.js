@@ -61,7 +61,7 @@ function reducer(state, action) {
     const { columnId } = action.payload;
 
     switch (action.type) {
-      case "addMainObject":
+      case "addSystemObject":
         const { id, name } = action.payload;
         draft.data.push({
           id,

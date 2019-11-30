@@ -12,11 +12,11 @@ export type CTA = {
   type: "object" | "coredata" | "metadata",
 };
 
-export type MainObject = {
+export type SystemObject = {
   id: string,
   name: string,
   elements: Element[],
   ctas: CTA[],
 };
 
-export type BoardData = MainObject[];
+export type BoardData = SystemObject[];

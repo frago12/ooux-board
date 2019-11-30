@@ -3,11 +3,11 @@ import * as React from "react";
 
 import { css } from "@emotion/core";
 
-import AddMainObject from "./AddMainObject";
+import AddSystemObject from "./AddSystemObject";
 import AddCTA from "./AddCTA";
 import AddElement from "./AddElement";
 import List from "./List";
-import MainObject from "./MainObject";
+import SystemObject from "./SystemObject";
 import TopWhiteSpace from "./TopWhiteSpace";
 import { useOOUX } from "./OOUXContext";
 
@@ -45,14 +45,14 @@ function Board({ onChange }: Props) {
           />
           <AddCTA to={column.id} />
           <List columnId={column.id} items={column.ctas} isCtas />
-          <MainObject name={column.name} />
+          <SystemObject name={column.name} />
           <List columnId={column.id} items={column.elements} />
           <AddElement to={column.id} />
         </div>
       ))}
       <div>
         <TopWhiteSpace addControlsSpace maxCtas={maxCtas} columnCtasCount={0} />
-        <AddMainObject />
+        <AddSystemObject />
       </div>
     </div>
   );

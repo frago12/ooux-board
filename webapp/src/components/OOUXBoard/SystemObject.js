@@ -10,9 +10,9 @@ type Props = {|
   name: string,
 |};
 
-function MainObject({ name }: Props) {
+function SystemObject({ name }: Props) {
   return (
-    <div css={cssMainObject}>
+    <div css={cssSystemObject}>
       <ElementContainer background={getColor("object")}>
         {name}
       </ElementContainer>
@@ -20,9 +20,9 @@ function MainObject({ name }: Props) {
   );
 }
 
-export default MainObject;
+export default SystemObject;
 
-const cssMainObject = css`
+const cssSystemObject = css`
   font-weight: bold;
   text-transform: uppercase;
 `;
