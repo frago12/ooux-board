@@ -32,5 +32,8 @@ django-shell:
 format:
 	docker-compose run --rm --no-deps api black --exclude "/migrations/" .
 
+lint:
+	docker-compose run --rm --no-deps api flake8 .
+
 test:
 	docker-compose run --rm api python manage.py test
