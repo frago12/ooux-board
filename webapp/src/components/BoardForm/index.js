@@ -4,13 +4,11 @@ import React from "react";
 import { textColors } from "styles/variables";
 
 type Props = {|
-  boardId?: string,
-  title?: string,
-  onUpdate?: (title: string) => void,
-  onCreate?: (title: string) => void,
+  defaultValue?: string,
+  onSubmit: (title: string) => void,
 |};
 
-function BoardForm({ boardId = null, title, onCreate, onUpdate }: Props) {
+function BoardForm({ defaultValue, onSubmit }: Props) {
   const inputRef: { current: any } = React.createRef();
 
   React.useEffect(() => {
@@ -18,26 +16,25 @@ function BoardForm({ boardId = null, title, onCreate, onUpdate }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSubmit = async e => {
+  const submitHandler = async e => {
     e.preventDefault();
     submit();
   };
 
   const submit = () => {
-    const newTitle = inputRef.current.value;
-    if (!newTitle || newTitle === title) return;
-    // $FlowFixMe
-    boardId === null ? onCreate(newTitle) : onUpdate(newTitle);
+    const title = inputRef.current.value;
+    if (!title || title === defaultValue) return;
+    onSubmit(title);
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={submitHandler}>
       <input
         type="text"
         css={cssInput}
         placeholder="Type a name for the board"
         ref={inputRef}
-        defaultValue={title}
+        defaultValue={defaultValue}
         onBlur={submit}
       />
     </form>

@@ -47,9 +47,8 @@ function Board({ boardId }: Props) {
   return (
     <div css={cssBoard}>
       <BoardForm
-        boardId={boardId}
-        title={board.data.title}
-        onUpdate={onChangeBoardTitle}
+        defaultValue={board.data.title}
+        onSubmit={onChangeBoardTitle}
       />
       <OOUXBoard initialData={board.data.data} onChange={onChangeBoardData} />
     </div>

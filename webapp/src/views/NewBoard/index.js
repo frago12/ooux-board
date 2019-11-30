@@ -2,20 +2,20 @@
 import React from "react";
 
 import { css } from "@emotion/core";
-import { createBoard } from "utils/apiClient/boards";
+import { createBoard as _createBoard } from "utils/apiClient/boards";
 import { navigate } from "@reach/router";
 
 import BoardForm from "components/BoardForm";
 
 function NewBoard() {
-  const onCreate = async name => {
-    const { data } = await createBoard(name);
+  const createBoard = async name => {
+    const { data } = await _createBoard(name);
     navigate(`/b/${data.id}`);
   };
 
   return (
     <div css={cssBoard}>
-      <BoardForm onCreate={onCreate} />
+      <BoardForm onSubmit={createBoard} />
     </div>
   );
 }
