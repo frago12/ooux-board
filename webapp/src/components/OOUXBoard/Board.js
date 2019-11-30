@@ -21,10 +21,12 @@ function Board({ onChange }: Props) {
   const {
     state: { data },
   } = useOOUX();
+  const [isInitUpdate, setIsInitUpdate] = React.useState(true);
 
   React.useEffect(() => {
-    onChange(data);
-  }, [data, onChange]);
+    isInitUpdate ? setIsInitUpdate(false) : onChange(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const maxCtas = React.useMemo(() => {
     let maxCtas = 0;

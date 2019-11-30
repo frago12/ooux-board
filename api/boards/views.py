@@ -65,4 +65,4 @@ class BoardView(View):
         )
         board.save()
 
-        return SuccessResponse(data=serializeBoard(board.uuid, board.title, board.data))
+        return SuccessResponse()

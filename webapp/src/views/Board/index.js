@@ -1,32 +1,57 @@
 // @flow
 import React from "react";
 
-import useSWR from "swr";
+import useSWR, { trigger } from "swr";
 import { css } from "@emotion/core";
 
-import Form from "../../components/BoardForm";
-import OOUXBoard from "../../components/OOUXBoard";
-import { updateBoard } from "utils/apiClient/boards";
+import BoardForm from "components/BoardForm";
+import OOUXBoard from "components/OOUXBoard";
+import { updateBoard as _updateBoard } from "utils/apiClient/boards";
+
+import type { BoardData } from "components/OOUXBoard/types";
 
 type Props = {|
   boardId: string,
 |};
 
+type DataToUpdate = {|
+  title?: string,
+  data?: BoardData,
+|};
+
 function Board({ boardId }: Props) {
   const { data: board } = useSWR(`/api/boards/${boardId}`);
 
-  const onChange = React.useCallback(
-    boardData => {
+  const onChangeBoardData = (data: BoardData) => {
+    updateBoard({ data });
+  };
+
+  const onChangeBoardTitle = (title: string) => {
+    updateBoard({ title });
+  };
+
+  const updateBoard = React.useCallback(
+    ({ title, data }: DataToUpdate) => {
       // TODO: do not call `updateBoard` the very first time
-      updateBoard(board.data.id, board.data.title, boardData);
+      _updateBoard(
+        boardId,
+        title || board.data.title,
+        data || board.data.data,
+      ).then(() => {
+        trigger(`/api/boards/${boardId}`);
+      });
     },
-    [board.data.id, board.data.title],
+    [board.data.data, boardId, board.data.title],
   );
 
   return (
     <div css={cssBoard}>
-      <Form boardId={boardId} boardName={board.data.title} />
-      <OOUXBoard initialData={board.data.data} onChange={onChange} />
+      <BoardForm
+        boardId={boardId}
+        title={board.data.title}
+        onUpdate={onChangeBoardTitle}
+      />
+      <OOUXBoard initialData={board.data.data} onChange={onChangeBoardData} />
     </div>
   );
 }

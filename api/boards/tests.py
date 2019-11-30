@@ -117,8 +117,8 @@ class Boards(TestBase):
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        response_data = response.json()["data"]
-        self.assertEqual(response_data["title"], data["title"])
+        self.board1.refresh_from_db()
+        self.assertEqual(data["title"], self.board1.title)
 
     def test_board_cannot_be_updated_if_title_is_empty(self):
         data = {"title": "", "data": []}
@@ -138,9 +138,8 @@ class Boards(TestBase):
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        response_data = response.json()["data"]
-        self.assertEqual(response_data["title"], data["title"])
-        self.assertEqual(response_data["data"], data["data"])
+        self.board1.refresh_from_db()
+        self.assertEqual(data["data"], self.board1.data)
 
     def test_board_data_elements_can_contain_only_allowed_types(self):
         data = {
@@ -162,9 +161,8 @@ class Boards(TestBase):
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        response_data = response.json()["data"]
-        self.assertEqual(response_data["title"], data["title"])
-        self.assertEqual(response_data["data"], data["data"])
+        self.board1.refresh_from_db()
+        self.assertEqual(data["data"], self.board1.data)
 
     def test_board_data_elements_cannot_contain_not_allowed_types(self):
         data = {
@@ -206,9 +204,8 @@ class Boards(TestBase):
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        response_data = response.json()["data"]
-        self.assertEqual(response_data["title"], data["title"])
-        self.assertEqual(response_data["data"], data["data"])
+        self.board1.refresh_from_db()
+        self.assertEqual(data["data"], self.board1.data)
 
     def test_board_data_ctas_cannot_be_updated_if_type_is_incorrect(self):
         data = {
@@ -235,9 +232,9 @@ class Boards(TestBase):
         self.login(self.user1)
         response = self.fetch(url, method="put", data=data)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        response_data = response.json()["data"]
-        self.assertEqual(response_data["title"], data["title"])
-        self.assertEqual(response_data["data"], self.board1.data)
+        previous_data = self.board1.data
+        self.board1.refresh_from_db()
+        self.assertEqual(previous_data, self.board1.data)
 
     def test_board_data_cannot_be_none(self):
         data = {"title": "title", "data": None}

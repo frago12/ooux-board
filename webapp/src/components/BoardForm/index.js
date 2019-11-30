@@ -1,17 +1,16 @@
 // @flow
 import React from "react";
 
-import { navigate } from "@reach/router";
-
-import { createBoard, updateBoard } from "utils/apiClient/boards";
 import { textColors } from "styles/variables";
 
 type Props = {|
   boardId?: string,
-  boardName?: string,
+  title?: string,
+  onUpdate?: (title: string) => void,
+  onCreate?: (title: string) => void,
 |};
 
-function BoardForm({ boardId = null, boardName }: Props) {
+function BoardForm({ boardId = null, title, onCreate, onUpdate }: Props) {
   const inputRef: { current: any } = React.createRef();
 
   React.useEffect(() => {
@@ -21,14 +20,14 @@ function BoardForm({ boardId = null, boardName }: Props) {
 
   const onSubmit = async e => {
     e.preventDefault();
-    const name = inputRef.current.value;
-    if (!name) return;
-    boardId === null ? onCreateBoard(name) : updateBoard(boardId, name);
+    submit();
   };
 
-  const onCreateBoard = async boardName => {
-    const { data } = await createBoard(boardName);
-    navigate(`/b/${data.id}`);
+  const submit = () => {
+    const newTitle = inputRef.current.value;
+    if (!newTitle || newTitle === title) return;
+    // $FlowFixMe
+    boardId === null ? onCreate(newTitle) : onUpdate(newTitle);
   };
 
   return (
@@ -38,7 +37,8 @@ function BoardForm({ boardId = null, boardName }: Props) {
         css={cssInput}
         placeholder="Type a name for the board"
         ref={inputRef}
-        defaultValue={boardName}
+        defaultValue={title}
+        onBlur={submit}
       />
     </form>
   );
