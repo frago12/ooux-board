@@ -85,13 +85,13 @@ function reducer(state, action) {
         );
         draft.data[columnIndex].elements[elementIndex] = item;
         break;
-      case "removeElement":
-        const { itemId } = action.payload;
+      case "removeItem":
+        const { itemId, group } = action.payload;
         columnIndex = state.data.findIndex(c => c.id === columnId);
-        elementIndex = draft.data[columnIndex].elements.findIndex(
+        elementIndex = draft.data[columnIndex][group].findIndex(
           e => e.id === itemId,
         );
-        draft.data[columnIndex].elements.splice(elementIndex, 1);
+        draft.data[columnIndex][group].splice(elementIndex, 1);
         break;
       case "reorderCtas":
         const { startIndex: startCta, endIndex: endCta } = action.payload;

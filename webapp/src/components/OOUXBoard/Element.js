@@ -27,8 +27,12 @@ function Element({ index, name, id, type, columnId }: Props) {
 
   const onClickRemove = () => {
     dispatch({
-      type: "removeElement",
-      payload: { columnId, itemId: id },
+      type: "removeItem",
+      payload: {
+        columnId,
+        itemId: id,
+        group: type === "cta" ? "ctas" : "elements",
+      },
     });
   };
 
