@@ -56,6 +56,7 @@ function reducer(state, action) {
   return produce(state, draft => {
     let columnIndex = -1;
     let elementIndex = -1;
+    let group: "ctas" | "elements" | "" = "";
 
     const { columnId } = action.payload;
 
@@ -77,16 +78,17 @@ function reducer(state, action) {
         columnIndex = state.data.findIndex(c => c.id === columnId);
         draft.data[columnIndex].elements.push({ ...action.payload.item });
         break;
-      case "editElement":
+      case "editItem":
         const { item } = action.payload;
+        group = action.payload.group;
         columnIndex = state.data.findIndex(c => c.id === columnId);
-        elementIndex = draft.data[columnIndex].elements.findIndex(
+        elementIndex = draft.data[columnIndex][group].findIndex(
           e => e.id === item.id,
         );
-        draft.data[columnIndex].elements[elementIndex] = item;
+        draft.data[columnIndex][group][elementIndex] = item;
         break;
       case "removeItem":
-        const { itemId, group } = action.payload;
+        const { itemId } = action.payload;
         columnIndex = state.data.findIndex(c => c.id === columnId);
         elementIndex = draft.data[columnIndex][group].findIndex(
           e => e.id === itemId,

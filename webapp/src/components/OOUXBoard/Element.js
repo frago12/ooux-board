@@ -42,8 +42,12 @@ function Element({ index, name, id, type, columnId }: Props) {
 
   const submit = value => {
     dispatch({
-      type: "editElement",
-      payload: { columnId, item: { id, name: value, type } },
+      type: "editItem",
+      payload: {
+        columnId,
+        item: { id, name: value, type },
+        group: type === "cta" ? "ctas" : "elements",
+      },
     });
     cancel();
   };
