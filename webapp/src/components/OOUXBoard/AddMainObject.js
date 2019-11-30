@@ -9,7 +9,11 @@ import { getColor } from "./utils";
 import { textColors } from "styles/variables";
 import { useOOUX } from "./OOUXContext";
 
-function AddMainObject() {
+type Props = {|
+  styles?: string,
+|};
+
+function AddMainObject({ styles }: Props) {
   const { dispatch } = useOOUX();
 
   const submit = value => {
@@ -17,7 +21,10 @@ function AddMainObject() {
   };
 
   return (
-    <ElementContainer background={getColor("empty")} css={cssAddObject}>
+    <ElementContainer
+      background={getColor("empty")}
+      css={[cssAddObject, styles]}
+    >
       <AutogrowInput
         styles={{
           cursor: "pointer",

@@ -51,7 +51,7 @@ function Board({ onChange }: Props) {
         </div>
       ))}
       <div>
-        <TopWhiteSpace maxCtas={maxCtas} columnCtasCount={0} />
+        <TopWhiteSpace addControlsSpace maxCtas={maxCtas} columnCtasCount={0} />
         <AddMainObject />
       </div>
     </div>
