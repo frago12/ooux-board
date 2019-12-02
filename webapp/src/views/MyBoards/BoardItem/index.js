@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "@reach/router";
 import { css } from "@emotion/core";
 
-import { colors } from "styles/variables";
+import { textColors } from "styles/variables";
 
 type Props = {|
   id: string,
@@ -23,9 +23,11 @@ export default BoardItem;
 
 const cssBoardItem = css`
   align-items: center;
-  background: ${colors.primary};
-  color: #fff;
+  background: #eee;
+  color: ${textColors.black};
   display: flex;
+  font-size: 14px;
+  font-weight: bold;
   height: 90px;
   justify-content: center;
   text-decoration: none;
