@@ -31,7 +31,6 @@ function List({ columnId, items, styles, isCtas = false }: Props) {
           ref={provided.innerRef}
           {...provided.droppableProps}
         >
-          {isCtas && provided.placeholder}
           {items.map((item, index) => (
             <DraggableItem
               key={item.id}
@@ -42,7 +41,7 @@ function List({ columnId, items, styles, isCtas = false }: Props) {
               columnId={columnId}
             />
           ))}
-          {!isCtas && provided.placeholder}
+          {provided.placeholder}
         </StyledList>
       )}
     </Droppable>
