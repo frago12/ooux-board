@@ -40,6 +40,12 @@ function AutogrowInput({
     }
   };
 
+  const onKeyUp = e => {
+    if (e.key === "Escape") {
+      onCancel();
+    }
+  };
+
   const onBlur = () => {
     const name = inputRef.current.value;
     if (!name) onCancel();
@@ -61,6 +67,7 @@ function AutogrowInput({
       onClick={onClick}
       onBlur={onBlur}
       onKeyPress={onKeyPress}
+      onKeyUp={onKeyUp}
       defaultValue={defaultValue}
     />
   );
