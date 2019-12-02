@@ -19,6 +19,7 @@ export default NewBoard;
 const cssNewBoard = css`
   align-items: center;
   border: 2px dashed #aaa;
+  box-sizing: border-box;
   color: ${textColors.black};
   display: flex;
   height: 90px;
