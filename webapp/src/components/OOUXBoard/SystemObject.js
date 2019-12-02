@@ -4,13 +4,17 @@ import React from "react";
 import Item from "./Item";
 import { getColor } from "./utils";
 import { useOOUX } from "./OOUXContext";
+import { ITEM_BOTTOM_MARGIN } from "./constants";
+
+import type { DragHandleProps } from "react-beautiful-dnd";
 
 type Props = {|
   id: string,
   name: string,
+  dragHandleProps: DragHandleProps,
 |};
 
-function SystemObject({ id, name }: Props) {
+function SystemObject({ id, name, dragHandleProps }: Props) {
   const { dispatch } = useOOUX();
 
   const submitItem = value => {
@@ -28,13 +32,19 @@ function SystemObject({ id, name }: Props) {
   };
 
   return (
-    <Item
-      name={name}
-      backgroundColor={getColor("object")}
-      onSubmit={submitItem}
-      onRemove={removeItem}
-      styles={{ textTransform: "uppercase", fontSize: 12 }}
-    />
+    <div className="list-item" {...dragHandleProps}>
+      <Item
+        name={name}
+        backgroundColor={getColor("object")}
+        onSubmit={submitItem}
+        onRemove={removeItem}
+        styles={{
+          textTransform: "uppercase",
+          fontSize: 12,
+          marginBottom: ITEM_BOTTOM_MARGIN,
+        }}
+      />
+    </div>
   );
 }
 

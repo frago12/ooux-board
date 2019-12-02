@@ -1,12 +1,11 @@
 // @flow
 import React from "react";
 
-// $FlowFixMe
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { css } from "@emotion/core";
+import { Droppable } from "react-beautiful-dnd";
+import styled from "@emotion/styled";
 
 import DraggableItem from "./DraggableItem";
-import { useOOUX } from "./OOUXContext";
+import { ITEM_BOTTOM_MARGIN } from "./constants";
 
 import type { Element as ElementType, CTA as CTAType } from "./types";
 
@@ -14,57 +13,50 @@ type Props = {|
   columnId: string,
   items: ElementType[] | CTAType[],
   isCtas?: boolean,
+  styles: { [any]: any },
 |};
 
-function List({ columnId, items, isCtas = false }: Props) {
-  const { dispatch } = useOOUX();
-
-  const onDragEnd = result => {
-    // dropped outside the list
-    if (!result.destination) return;
-
-    dispatch({
-      type: "reorderItems",
-      payload: {
-        columnId,
-        startIndex: result.source.index,
-        endIndex: result.destination.index,
-        group: isCtas ? "ctas" : "elements",
-      },
-    });
-  };
-
+function List({ columnId, items, styles, isCtas = false }: Props) {
   return (
-    <DragDropContext {...{ onDragEnd }}>
-      <Droppable droppableId="droppable">
-        {(provided, snapshot) => (
-          <div
-            css={cssList}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {items.map((item, index) => (
-              <DraggableItem
-                key={item.id}
-                index={index}
-                name={item.name}
-                id={item.id}
-                type={item.type}
-                columnId={columnId}
-              />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <Droppable
+      droppableId={`${columnId}/${isCtas ? "ctas" : "elements"}`}
+      type={isCtas ? "CTAS" : "ELEMENTS"}
+      direction="vertical"
+    >
+      {(provided, snapshot) => (
+        <StyledList
+          css={styles}
+          isEmpty={items.length === 0}
+          isDraggingOver={snapshot.isDraggingOver}
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          {isCtas && provided.placeholder}
+          {items.map((item, index) => (
+            <DraggableItem
+              key={item.id}
+              index={index}
+              name={item.name}
+              id={item.id}
+              type={item.type}
+              columnId={columnId}
+            />
+          ))}
+          {!isCtas && provided.placeholder}
+        </StyledList>
+      )}
+    </Droppable>
   );
 }
 
 export default List;
 
-const cssList = css`
-  > * {
-    margin-bottom: 5px;
+const StyledList = styled.div`
+  background: ${props =>
+    props.isEmpty || props.isDraggingOver ? "#eee" : "transparent"};
+  margin-bottom: ${props => (props.isEmpty ? "5px" : 0)};
+  min-height: 20px;
+  > .list-item {
+    margin-bottom: ${ITEM_BOTTOM_MARGIN}px;
   }
 `;

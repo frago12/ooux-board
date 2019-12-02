@@ -105,12 +105,38 @@ function reducer(state, action) {
         );
         draft.data[columnIndex][group].splice(elementIndex, 1);
         break;
+      case "reorderColumns":
+        const { sourceIndex, destinationIndex } = action.payload;
+        const [extractedColumn] = draft.data.splice(sourceIndex, 1);
+        draft.data.splice(destinationIndex, 0, extractedColumn);
+        break;
       case "reorderItems":
-        const { startIndex: startCta, endIndex: endCta } = action.payload;
+        const {
+          sourceColumnId,
+          sourceItemIndex,
+          destinationColumnId,
+          destinationItemIndex,
+        } = action.payload;
         group = action.payload.group;
-        columnIndex = state.data.findIndex(c => c.id === columnId);
-        const [removedCta] = draft.data[columnIndex][group].splice(startCta, 1);
-        draft.data[columnIndex][group].splice(endCta, 0, removedCta);
+
+        // Extract item
+        const sourceColumnIndex = state.data.findIndex(
+          c => c.id === sourceColumnId,
+        );
+        const [extractedItem] = draft.data[sourceColumnIndex][group].splice(
+          sourceItemIndex,
+          1,
+        );
+
+        // Insert item
+        const destinationColumnIndex = state.data.findIndex(
+          c => c.id === destinationColumnId,
+        );
+        draft.data[destinationColumnIndex][group].splice(
+          destinationItemIndex,
+          0,
+          extractedItem,
+        );
         break;
       default:
         throw new Error("Invalid board action");

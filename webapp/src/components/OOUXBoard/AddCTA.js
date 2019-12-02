@@ -9,6 +9,7 @@ import AutogrowInput from "./AutogrowInput";
 import { ElementContainer } from "./styledComponents";
 import { getColor } from "./utils";
 import { useOOUX } from "./OOUXContext";
+import { ITEM_CONTROLS_SIZE } from "./constants";
 
 type Props = {|
   to: string,
@@ -71,9 +72,9 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 14px;
   font-weight bold;
-  height: 25px;
+height: ${ITEM_CONTROLS_SIZE}px;
   opacity: 0.5;
-  width: 25px;
+width: ${ITEM_CONTROLS_SIZE}px;
 
   :hover, :focus {
     opacity: 1;

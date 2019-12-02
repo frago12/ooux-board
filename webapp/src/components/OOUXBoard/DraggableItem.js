@@ -47,6 +47,7 @@ function DraggableItem({ index, name, id, type, columnId }: Props) {
     <Draggable draggableId={id} index={index}>
       {(provided, snapshot) => (
         <div
+          className="list-item"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}

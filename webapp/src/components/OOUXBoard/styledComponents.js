@@ -1,18 +1,20 @@
 import styled from "@emotion/styled";
 
+import { ITEM_SIZE } from "./constants";
+
 export const ElementContainer = styled.div`
   align-items: center;
-  background ${props => (props.isDragging ? "transparent" : props.background)};
-  border: ${props => (props.isDragging ? "1px dashed #bbb" : "none")};
+  background ${props => props.background};
+  border: ${props => (props.isDragging ? "1px dashed #666" : "none")};
   box-sizing: border-box;
-  color: ${props => (props.isDragging ? "transparent" : "#fff")};
+  color: #fff;
   display: flex;
   font-size: 11px;
   font-weight: bold;
-  height: 90px;
+  height: ${ITEM_SIZE}px;
   justify-content: center;
   padding: 5px;
   position: relative;
   text-align: center;
-  width: 90px;
+  width: ${ITEM_SIZE}px;
 `;
