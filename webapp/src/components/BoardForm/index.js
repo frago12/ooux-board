@@ -5,7 +5,7 @@ import { textColors } from "styles/variables";
 
 type Props = {|
   defaultValue?: string,
-  onSubmit: (title: string) => void,
+  onSubmit: (title: string) => void | Promise<any>,
 |};
 
 function BoardForm({ defaultValue, onSubmit }: Props) {

@@ -1,6 +1,7 @@
 // @flow
 import React from "react";
 
+// $FlowFixMe
 import { Draggable } from "react-beautiful-dnd";
 
 import Item from "./Item";

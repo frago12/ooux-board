@@ -29,7 +29,7 @@ function SystemObject({ id, name }: Props) {
 
   return (
     <Item
-      {...{ id, name }}
+      name={name}
       backgroundColor={getColor("object")}
       onSubmit={submitItem}
       onRemove={removeItem}

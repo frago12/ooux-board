@@ -32,9 +32,9 @@ function Board({ boardId }: Props) {
 
   const updateBoard = React.useCallback(
     ({ title, data }: DataToUpdate) => {
-      // TODO: do not call `updateBoard` the very first time
       _updateBoard(
         boardId,
+        // $FlowFixMe
         title || board.data.title,
         data || board.data.data,
       ).then(() => {

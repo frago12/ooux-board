@@ -2,7 +2,6 @@
 import React from "react";
 
 import styled from "@emotion/styled";
-// $FlowFixMe
 import { css } from "@emotion/core";
 
 import AutogrowInput from "./AutogrowInput";
@@ -12,7 +11,7 @@ type Props = {|
   name: string,
   backgroundColor: string,
   onSubmit: (value: string) => void,
-  onCancel: () => void,
+  onRemove: () => void,
   isDragging?: boolean,
   styles?: { [any]: any },
 |};
