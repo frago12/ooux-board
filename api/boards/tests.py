@@ -261,3 +261,29 @@ class Boards(TestBase):
         self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
         response_data = response.json()
         self.assertEqual(response_data["error"], True)
+
+    #####
+    # Delete
+    #####
+    def test_user_can_delete_board(self):
+        self.assertEqual(Board.objects.filter(user=self.user1).count(), 2)
+        url = self.board_url(self.board1.uuid)
+        self.login(self.user1)
+        response = self.fetch(url, method="delete")
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(Board.objects.filter(user=self.user1).count(), 1)
+
+    def test_cannot_delete_non_existing_board(self):
+        self.assertEqual(Board.objects.filter(user=self.user1).count(), 2)
+        url = self.board_url("abc")
+        self.login(self.user1)
+        response = self.fetch(url, method="delete")
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertEqual(Board.objects.filter(user=self.user1).count(), 2)
+
+    def test_unsigned_user_cannot_delete_board(self):
+        self.assertEqual(Board.objects.filter(user=self.user1).count(), 2)
+        url = self.board_url(self.board1.uuid)
+        response = self.fetch(url, method="delete")
+        self.assertEqual(response.status_code, HTTPStatus.UNAUTHORIZED)
+        self.assertEqual(Board.objects.filter(user=self.user1).count(), 2)

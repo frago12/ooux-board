@@ -66,3 +66,8 @@ class BoardView(View):
         board.save()
 
         return SuccessResponse()
+
+    @validate_existing_board
+    def delete(self, request, board_id):
+        request.board.delete()
+        return SuccessResponse()

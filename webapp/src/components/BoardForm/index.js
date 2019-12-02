@@ -50,6 +50,5 @@ const cssInput = {
   fontSize: 16,
   fontWeight: "bold",
   outline: "none",
-  marginBottom: 40,
   width: "100%",
 };

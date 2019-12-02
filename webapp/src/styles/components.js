@@ -77,3 +77,16 @@ export const PrimaryButton = styled.button`
 export const SecondaryButton = styled(PrimaryButton)`
   background: ${colors.secondary};
 `;
+
+export const Icon = styled.button`
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 18px;
+  color: ${textColors.gray};
+  cursor: pointer;
+
+  :hover {
+    color: ${textColors.black};
+  }
+`;

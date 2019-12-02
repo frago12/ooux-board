@@ -3,10 +3,16 @@ import React from "react";
 
 import useSWR, { trigger } from "swr";
 import { css } from "@emotion/core";
+import { navigate } from "@reach/router";
+import { MdDelete } from "react-icons/md";
 
 import BoardForm from "components/BoardForm";
 import OOUXBoard from "components/OOUXBoard";
-import { updateBoard as _updateBoard } from "utils/apiClient/boards";
+import { Icon } from "styles/components";
+import {
+  updateBoard as _updateBoard,
+  deleteBoard as _deleteBoard,
+} from "utils/apiClient/boards";
 
 import type { BoardData } from "components/OOUXBoard/types";
 
@@ -44,12 +50,27 @@ function Board({ boardId }: Props) {
     [board.data.data, boardId, board.data.title],
   );
 
+  const deleteBoard = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this board?",
+    );
+    if (!confirmed) return;
+    _deleteBoard(boardId).then(() => {
+      navigate("/");
+    });
+  };
+
   return (
     <div css={cssBoard}>
-      <BoardForm
-        defaultValue={board.data.title}
-        onSubmit={onChangeBoardTitle}
-      />
+      <div css={cssToolbar}>
+        <BoardForm
+          defaultValue={board.data.title}
+          onSubmit={onChangeBoardTitle}
+        />
+        <Icon onClick={deleteBoard}>
+          <MdDelete />
+        </Icon>
+      </div>
       <OOUXBoard initialData={board.data.data} onChange={onChangeBoardData} />
     </div>
   );
@@ -59,4 +80,12 @@ export default Board;
 
 const cssBoard = css`
   padding: 20px;
+`;
+
+const cssToolbar = css`
+  display: flex;
+  margin-bottom: 40px;
+  > form {
+    flex-grow: 1;
+  }
 `;

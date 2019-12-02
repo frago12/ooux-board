@@ -20,4 +20,5 @@ export const updateBoard = (id: string, title: string, data?: BoardData) =>
     }),
   );
 
-export const deleteeBoard = () => (id: string) => {};
+export const deleteBoard = (id: string) =>
+  withErrorHandling(() => request(`/api/boards/${id}`, { method: "delete" }));
