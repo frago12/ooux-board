@@ -5,7 +5,7 @@ import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { css } from "@emotion/core";
 
-import Element from "./Element";
+import DraggableItem from "./DraggableItem";
 import { useOOUX } from "./OOUXContext";
 
 import type { Element as ElementType, CTA as CTAType } from "./types";
@@ -44,7 +44,7 @@ function List({ columnId, items, isCtas = false }: Props) {
             {...provided.droppableProps}
           >
             {items.map((item, index) => (
-              <Element
+              <DraggableItem
                 key={item.id}
                 index={index}
                 name={item.name}

@@ -7,7 +7,7 @@ export const ElementContainer = styled.div`
   box-sizing: border-box;
   color: ${props => (props.isDragging ? "transparent" : "#fff")};
   display: flex;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   height: 90px;
   justify-content: center;

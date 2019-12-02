@@ -71,7 +71,7 @@ export default AutogrowInput;
 const cssInput = {
   border: "none",
   color: "#333",
-  fontSize: 12,
+  fontSize: 11,
   textAlign: "center",
   resize: "none",
   outline: "none",

@@ -20,7 +20,7 @@ function TopWhiteSpace({
       {[...Array(maxCtas - columnCtasCount).keys()].map(i => (
         <ElementContainer key={i} background={getColor("empty")} />
       ))}
-      {addControlsSpace && <div css={{ height: 50 }} />}
+      {addControlsSpace && <div css={{ height: 30 }} />}
     </>
   );
 }

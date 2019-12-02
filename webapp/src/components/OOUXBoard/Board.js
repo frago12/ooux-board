@@ -47,7 +47,7 @@ function Board({ onChange }: Props) {
           />
           <AddCTA to={column.id} />
           <List columnId={column.id} items={column.ctas} isCtas />
-          <SystemObject name={column.name} />
+          <SystemObject id={column.id} name={column.name} />
           <List columnId={column.id} items={column.elements} />
           <AddElement to={column.id} />
         </div>

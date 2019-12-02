@@ -1,28 +1,41 @@
 // @flow
 import React from "react";
 
-import { css } from "@emotion/core";
-
-import { ElementContainer } from "./styledComponents";
+import Item from "./Item";
 import { getColor } from "./utils";
+import { useOOUX } from "./OOUXContext";
 
 type Props = {|
+  id: string,
   name: string,
 |};
 
-function SystemObject({ name }: Props) {
+function SystemObject({ id, name }: Props) {
+  const { dispatch } = useOOUX();
+
+  const submitItem = value => {
+    dispatch({
+      type: "editSystemObject",
+      payload: { id, name: value },
+    });
+  };
+
+  const removeItem = () => {
+    dispatch({
+      type: "removeSystemObject",
+      payload: { id },
+    });
+  };
+
   return (
-    <div css={cssSystemObject}>
-      <ElementContainer background={getColor("object")}>
-        {name}
-      </ElementContainer>
-    </div>
+    <Item
+      {...{ id, name }}
+      backgroundColor={getColor("object")}
+      onSubmit={submitItem}
+      onRemove={removeItem}
+      styles={{ textTransform: "uppercase", fontSize: 12 }}
+    />
   );
 }
 
 export default SystemObject;
-
-const cssSystemObject = css`
-  font-weight: bold;
-  text-transform: uppercase;
-`;

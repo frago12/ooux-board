@@ -78,6 +78,11 @@ function reducer(state, action) {
         columnIndex = state.data.findIndex(c => c.id === columnId);
         draft.data[columnIndex].elements.push({ ...action.payload.item });
         break;
+      case "editSystemObject":
+        const so = draft.data.find(obj => obj.id === action.payload.id);
+        if (!so) throw new Error("Invalid object");
+        so.name = action.payload.name;
+        break;
       case "editItem":
         const { item } = action.payload;
         group = action.payload.group;
@@ -86,6 +91,10 @@ function reducer(state, action) {
           e => e.id === item.id,
         );
         draft.data[columnIndex][group][elementIndex] = item;
+        break;
+      case "removeSystemObject":
+        columnIndex = draft.data.findIndex(c => c.id === action.payload.id);
+        draft.data.splice(columnIndex, 1);
         break;
       case "removeItem":
         const { itemId } = action.payload;
