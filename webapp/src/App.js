@@ -10,6 +10,7 @@ import {
 } from "react-toasts";
 
 import AuthenticatedApp from "./AuthenticatedApp";
+import ErrorBoundary from "react-error-boundaries";
 import UnauthenticatedApp from "./UnauthenticatedApp";
 import Navbar from "components/Navbar";
 import request from "utils/request";
@@ -23,31 +24,33 @@ function App() {
   } = useAuth();
 
   return (
-    <SWRConfig
-      value={{
-        refreshInterval: 0,
-        fetcher: (...args) => withErrorHandling(() => request(...args)),
-        revalidateOnFocus: false,
-        suspense: true,
-      }}
-    >
-      <Navbar user={user} logout={logout} />
-      <div css={cssMainContainer}>
-        {loading ? (
-          <div>Loading...</div>
-        ) : showErrorPage ? (
-          <div>Whoops! somehitng went wrong</div>
-        ) : user ? (
-          <AuthenticatedApp />
-        ) : (
-          <UnauthenticatedApp />
-        )}
-      </div>
-      <ToastsContainer
-        store={ToastsStore}
-        position={ToastsContainerPosition.TOP_RIGHT}
-      />
-    </SWRConfig>
+    <ErrorBoundary FallbackComponent={<div>Whoops! somehitng went wrong</div>}>
+      <SWRConfig
+        value={{
+          refreshInterval: 0,
+          fetcher: (...args) => withErrorHandling(() => request(...args)),
+          revalidateOnFocus: false,
+          suspense: true,
+        }}
+      >
+        <Navbar user={user} logout={logout} />
+        <div css={cssMainContainer}>
+          {loading ? (
+            <div>Loading...</div>
+          ) : showErrorPage ? (
+            <div>Whoops! somehitng went wrong</div>
+          ) : user ? (
+            <AuthenticatedApp />
+          ) : (
+            <UnauthenticatedApp />
+          )}
+        </div>
+        <ToastsContainer
+          store={ToastsStore}
+          position={ToastsContainerPosition.TOP_RIGHT}
+        />
+      </SWRConfig>
+    </ErrorBoundary>
   );
 }
 
