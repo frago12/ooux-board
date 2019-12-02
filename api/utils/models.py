@@ -5,7 +5,7 @@ from utils.common import make_uuid
 
 class BaseModel(models.Model):
     uuid = models.CharField(db_index=True, max_length=32, unique=True)
-    created = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:

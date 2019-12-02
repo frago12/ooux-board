@@ -20,7 +20,7 @@ class Board(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
 
     class Meta:
-        ordering = ("created",)
+        ordering = ("-created",)
 
     def __str__(self):
         return self.title

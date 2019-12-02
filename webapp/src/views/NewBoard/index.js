@@ -10,7 +10,7 @@ import BoardForm from "components/BoardForm";
 function NewBoard() {
   const createBoard = async name => {
     const { data } = await _createBoard(name);
-    navigate(`/b/${data.id}`);
+    navigate(`/b/${data.id}`, { replace: true });
   };
 
   return (
