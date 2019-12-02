@@ -88,7 +88,7 @@ class Boards(TestBase):
         response = self.fetch(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         response_data = response.json()["data"]
-        self.assertEqual(response_data["id"], self.board1.uuid)
+        self.assertEqual(response_data["id"], str(self.board1.uuid))
         self.assertEqual(response_data["title"], self.board1.title)
         self.assertEqual(response_data["data"], self.board1.data)
 
