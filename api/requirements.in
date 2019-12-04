@@ -2,6 +2,8 @@ django
 psycopg2
 schema
 
+gunicorn
+
 ipdb
 flake8
 black
