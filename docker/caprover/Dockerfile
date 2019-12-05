@@ -11,5 +11,6 @@ COPY ./api ./
 
 EXPOSE 80
 
-CMD gunicorn -w 4 api.wsgi -b 0.0.0.0:80
+COPY ./docker/caprover/entrypoint.sh ./
+CMD sh entrypoint.sh
 
