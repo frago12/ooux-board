@@ -6,9 +6,10 @@ import { css } from "@emotion/core";
 
 import NewBoard from "./NewBoard";
 import BoardItem from "./BoardItem";
+import { API_URL } from "utils/constants";
 
 function MyBoards() {
-  const { data: boards } = useSWR("/api/boards");
+  const { data: boards } = useSWR(`${API_URL}/api/boards`);
 
   return (
     <div css={cssMyBoard}>

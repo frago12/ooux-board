@@ -26,7 +26,7 @@ function FetchRequest(url: string, config: Config = {}) {
 
   return fetch(url, {
     credentials: "include",
-    mode: "same-origin",
+    mode: "cors",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

@@ -9,6 +9,7 @@ import { MdDelete } from "react-icons/md";
 import BoardForm from "components/BoardForm";
 import OOUXBoard from "components/OOUXBoard";
 import { Icon } from "styles/components";
+import { API_URL } from "utils/constants";
 import {
   updateBoard as _updateBoard,
   deleteBoard as _deleteBoard,
@@ -26,7 +27,7 @@ type DataToUpdate = {|
 |};
 
 function Board({ boardId }: Props) {
-  const { data: board } = useSWR(`/api/boards/${boardId}`);
+  const { data: board } = useSWR(`${API_URL}/api/boards/${boardId}`);
 
   const onChangeBoardData = (data: BoardData) => {
     updateBoard({ data });
@@ -44,7 +45,7 @@ function Board({ boardId }: Props) {
         title || board.data.title,
         data || board.data.data,
       ).then(() => {
-        trigger(`/api/boards/${boardId}`);
+        trigger(`${API_URL}/api/boards/${boardId}`);
       });
     },
     [board.data.data, boardId, board.data.title],

@@ -2,12 +2,13 @@
 import { ToastsStore } from "react-toasts";
 
 import request from "utils/request";
+import { API_URL } from "utils/constants";
 import { withErrorHandling } from "utils/decorators";
 
 export const login = (email: string, password: string) =>
   withErrorHandling(
     () =>
-      request("/api/users/login/", {
+      request(`${API_URL}/api/users/login/`, {
         method: "post",
         body: { email, password },
       }),
@@ -22,7 +23,7 @@ export const login = (email: string, password: string) =>
 export const register = (email: string, password: string, password2: string) =>
   withErrorHandling(
     () =>
-      request("/api/users/register/", {
+      request(`${API_URL}/api/users/register/`, {
         method: "post",
         body: { email, username: email, password, password2 },
       }),
@@ -35,6 +36,7 @@ export const register = (email: string, password: string, password2: string) =>
   );
 
 export const logout = () =>
-  withErrorHandling(() => request("/api/users/logout/"));
+  withErrorHandling(() => request(`${API_URL}/users/logout/`));
 
-export const me = () => withErrorHandling(() => request("/api/users/me/"));
+export const me = () =>
+  withErrorHandling(() => request(`${API_URL}/api/users/me/`));

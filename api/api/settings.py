@@ -20,7 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "r#n3gu!yio)e$#6a073)n+zt69+^jipd%ks1yh1tus#^l+p7wt")
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY", "r#n3gu!yio)e$#6a073)n+zt69+^jipd%ks1yh1tus#^l+p7wt"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG") == "True"
@@ -126,6 +128,8 @@ STATIC_ROOT = "/public"
 
 AUTHENTICATION_BACKENDS = ["users.backends.EmailUsernameBackend"]
 
-CORS_ORIGIN_WHITELIST = [
-    "https://ooux.frago.dev",
-]
+CORS_ORIGIN_WHITELIST = ["https://ooux.frago.dev", "http://localhost:3000"]
+
+CSRF_TRUSTED_ORIGINS = ["https://ooux.frago.dev", "http://localhost:3000"]
+
+CORS_ALLOW_CREDENTIALS = True
