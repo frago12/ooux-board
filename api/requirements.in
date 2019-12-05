@@ -1,6 +1,7 @@
 django
 psycopg2
 schema
+django-cors-headers
 
 gunicorn
 
