@@ -24,7 +24,7 @@ function FetchRequest(url: string, config: Config = {}) {
     config.body = JSON.stringify(config.body);
   }
 
-  return fetch(url, {
+  const fetchConfig = {
     credentials: "include",
     mode: "cors",
     headers: {
@@ -33,7 +33,9 @@ function FetchRequest(url: string, config: Config = {}) {
       "X-CSRFToken": csrftoken,
     },
     ...config,
-  })
+  };
+
+  return fetch(url, fetchConfig)
     .then(status)
     .then(json)
     .then(data => data)

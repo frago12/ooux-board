@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST, require_GET
 from http import HTTPStatus
 from schema import Schema, And
@@ -20,7 +20,6 @@ new_user_schema = Schema(
 
 @function_schema_validation(new_user_schema)
 @require_POST
-@csrf_exempt
 def signup(request):
     user_info = request.json_data
 
@@ -46,7 +45,6 @@ user_schema = Schema({"email": And(str, len), "password": And(str, len)})
 
 @function_schema_validation(user_schema)
 @require_POST
-@csrf_exempt
 def signin(request):
     user_info = request.json_data
     user = authenticate(username=user_info["email"], password=user_info["password"])
@@ -65,6 +63,7 @@ def signout(request):
 
 
 @require_GET
+@ensure_csrf_cookie
 def me(request):
     if request.user.is_authenticated:
         return SuccessResponse({"email": request.user.email})

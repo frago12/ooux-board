@@ -65,12 +65,10 @@ export function AuthProvider(props: Props) {
   React.useEffect(() => {
     // $FlowFixMe
     setDispatch(dispatch);
-    console.log("here");
     me();
   }, []);
 
   const me = async () => {
-    console.log("me");
     const { data } = await AuthApi.me();
     if (!data) return;
     dispatch({ type: "setUserInfo", payload: { email: data.email } });

@@ -15,8 +15,8 @@ export const login = (email: string, password: string) =>
     error => {
       if (error.status === 400) {
         ToastsStore.error("Invalid credentials");
-        return { error };
       }
+      return { error };
     },
   );
 
@@ -33,7 +33,6 @@ export const register = (email: string, password: string, password2: string) =>
       } else if (error.status === 409) {
         ToastsStore.error("Email was already taken");
       }
-
       return { error };
     },
   );

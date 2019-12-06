@@ -133,3 +133,5 @@ CORS_ORIGIN_WHITELIST = ["https://ooux.frago.dev", "http://localhost:3000"]
 CSRF_TRUSTED_ORIGINS = ["localhost", ".frago.dev"]
 
 CORS_ALLOW_CREDENTIALS = True
+
+CSRF_COOKIE_DOMAIN = ".frago.dev"
