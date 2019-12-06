@@ -15,7 +15,7 @@ export const login = (email: string, password: string) =>
     error => {
       if (error.status === 400) {
         ToastsStore.error("Invalid credentials");
-        return error;
+        return { error };
       }
     },
   );
@@ -25,18 +25,21 @@ export const register = (email: string, password: string, password2: string) =>
     () =>
       request(`${API_URL}/api/users/register/`, {
         method: "post",
-        body: { email, username: email, password, password2 },
+        body: { email, password, password2 },
       }),
     error => {
       if (error.status === 400) {
         ToastsStore.error("Make sure data is correct");
-        return error;
+      } else if (error.status === 409) {
+        ToastsStore.error("Email was already taken");
       }
+
+      return { error };
     },
   );
 
 export const logout = () =>
-  withErrorHandling(() => request(`${API_URL}/users/logout/`));
+  withErrorHandling(() => request(`${API_URL}/api/users/logout/`));
 
 export const me = () =>
   withErrorHandling(() => request(`${API_URL}/api/users/me/`));

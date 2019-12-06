@@ -64,7 +64,6 @@ class BoardView(View):
             board_data.get("data", {}) if "data" in board_data.keys() else board.data
         )
         board.save()
-
         return SuccessResponse()
 
     @validate_existing_board

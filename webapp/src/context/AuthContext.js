@@ -65,10 +65,12 @@ export function AuthProvider(props: Props) {
   React.useEffect(() => {
     // $FlowFixMe
     setDispatch(dispatch);
+    console.log("here");
     me();
   }, []);
 
   const me = async () => {
+    console.log("me");
     const { data } = await AuthApi.me();
     if (!data) return;
     dispatch({ type: "setUserInfo", payload: { email: data.email } });
@@ -86,12 +88,8 @@ export function AuthProvider(props: Props) {
   };
 
   const register = async (email, password, password2) => {
-    const { error: loginError } = await AuthApi.register(
-      email,
-      password,
-      password2,
-    );
-    if (loginError) return;
+    const { error } = await AuthApi.register(email, password, password2);
+    if (error) return;
 
     const { data } = await AuthApi.me();
     if (!data) return;

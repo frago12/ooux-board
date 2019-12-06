@@ -25,7 +25,7 @@ def signup(request):
     user_info = request.json_data
 
     if User.objects.filter(email=user_info["email"]).exists():
-        return ErrorResponse(status=HTTPStatus.BAD_REQUEST)
+        return ErrorResponse(status=HTTPStatus.CONFLICT)
 
     new_user = User()
     new_user.email = user_info["email"]
@@ -34,6 +34,7 @@ def signup(request):
     new_user.save()
     user = authenticate(username=new_user.email, password=user_info["password"])
     if user is not None:
+        login(request, user)
         response = {"email": new_user.email}
         return SuccessResponse(response, status=HTTPStatus.CREATED)
     else:

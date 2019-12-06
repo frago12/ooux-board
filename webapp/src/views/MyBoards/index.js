@@ -9,7 +9,7 @@ import BoardItem from "./BoardItem";
 import { API_URL } from "utils/constants";
 
 function MyBoards() {
-  const { data: boards } = useSWR(`${API_URL}/api/boards`);
+  const { data: boards } = useSWR(`${API_URL}/api/boards/`);
 
   return (
     <div css={cssMyBoard}>
