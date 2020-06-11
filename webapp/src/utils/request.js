@@ -40,7 +40,7 @@ function FetchRequest(url: string, config: Config = {}) {
     .then(json)
     .then(data => data)
     .catch(error => {
-      if (error.status === 401 || error.status === 403) {
+      if (error.status === 401 || error.status === 403 || !error.status) {
         // $FlowFixMe
         dispatch({ type: "logout" });
       } else if (error.status === 500) {
